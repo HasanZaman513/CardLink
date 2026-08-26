@@ -35,6 +35,7 @@
 <div class="cardBrandMark" id="cardBrandMark">CL</div>
 </div>
 <p class="sharePrompt">Your CardLink is ready. Share it anytime without creating it again.</p>
+<div id="savedState" style="display:none;margin:10px 0 18px;padding:12px 14px;border-radius:14px;background:#ecfdf5;color:#166534;font-weight:700;text-align:center;">✓ Saved on this device — available in My Card</div>
 <div class="actionGrid">
 <a id="callAction" class="actionBtn primary" href="#" style="display:none">☎ &nbsp; Call</a>
 <a id="emailAction" class="actionBtn email" href="#" style="display:none">✉ &nbsp; Email</a>
@@ -114,6 +115,8 @@ $('removePhotoBtn').onclick=()=>{photoData='';$('photo').value='';renderPhotoPic
   history.replaceState(null,'',location.href.split('#')[0]);
   setData(d);
   $('notice').classList.add('show');
+  $('savedState').style.display='block';
+  $('saveCardBtn').innerHTML='✓ &nbsp; Card Saved';
   showView('card');
   setTimeout(()=>$('notice').classList.remove('show'),2800);
 };$('sampleBtn').onclick=()=>setData({photoData:'',name:'Alex Morgan',role:'Product Manager',company:'Northstar Labs',location:'Adelaide, Australia',phone:'+61 412 345 678',email:'alex@example.com',showPhone:true,showEmail:true,tagline:'Helping teams turn practical ideas into simple digital products people can use.',linkedin:'https://www.linkedin.com/',website:'https://example.com/',cardColor:'#eff6ff'});$('clearBtn').onclick=()=>{
@@ -128,9 +131,8 @@ $('saveCardBtn').onclick=()=>{
   localStorage.setItem('cardlink-profile',JSON.stringify(d));
   if(!location.hash.includes('#card=')) history.replaceState(null,'',location.href.split('#')[0]);
   render();
-  const old=$('saveCardBtn').innerHTML;
-  $('saveCardBtn').innerHTML='✓ &nbsp; Saved for reuse';
-  setTimeout(()=>$('saveCardBtn').innerHTML=old,1800);
+  $('saveCardBtn').innerHTML='✓ &nbsp; Card Saved';
+  $('savedState').style.display='block';
 };
 $('copyBtn').onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);$('copyBtn').textContent='✓ Copied';setTimeout(()=>$('copyBtn').innerHTML='🔗 &nbsp; Copy Link',1500)}catch{prompt('Copy this CardLink:',u)}};
 $('shareBtn').onclick=async()=>{const d=getData(),u=shareUrl(),text=[d.name,d.role,d.company].filter(Boolean).join(' • ');if(navigator.share){try{await navigator.share({title:(d.name||'My')+' CardLink',text:text||'View my professional CardLink',url:u})}catch{}}else $('copyBtn').click()};
@@ -147,6 +149,8 @@ function load(){
     if(d){
       setData({...defaultData,...d});
       showView('card');
+      if($('savedState')) $('savedState').style.display='none';
+      if($('saveCardBtn')) $('saveCardBtn').innerHTML='💾 &nbsp; Save Card';
       return;
     }
   }
@@ -155,6 +159,8 @@ function load(){
     try{
       setData({...defaultData,...JSON.parse(stored)});
       showView('card');
+      if($('savedState')) $('savedState').style.display='block';
+      if($('saveCardBtn')) $('saveCardBtn').innerHTML='✓ &nbsp; Card Saved';
       return;
     }catch{}
   }
