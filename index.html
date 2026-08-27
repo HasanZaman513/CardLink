@@ -125,7 +125,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
   </div>
   <div id="signedInBox" style="display:none">
     <div class="saved">✓ Signed in as <span id="userEmail"></span></div>
-    <p class="lead">Your DShario is linked to this account.</p>
+    <p class="lead">Your DShario is saved online. Tap My Card above to open it, or Edit / Create to update it.</p>
     <button id="signOutBtn" class="btn ghost">Sign out</button>
   </div>
 </div>
@@ -326,9 +326,18 @@ $("pngBtn").onclick=async()=>{
 
 (async function init(){
   const params=new URLSearchParams(location.search),slug=params.get("card");
-  if(slug){await loadPublicCard(slug);return}
+
+  if(slug){
+    await loadPublicCard(slug);
+    return;
+  }
+
   await refreshAuth();
-  if(user){setView(currentCard?"card":"edit")}else{setView("account")}
+  publicMode=false;
+  $("tabs").style.display="grid";
+  $("publicHeader").style.display="none";
+  $("accountPill").style.display="inline-block";
+  setView("account");
 })();
 </script>
 </body>
