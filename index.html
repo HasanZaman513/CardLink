@@ -229,11 +229,16 @@ async function loadPublicCard(slug){
   if(error||!card){render(null);msg("This DShario was not found or is private.","err");return}
   render(card); setView("card");
 }
-async function refreshAuth(){
+async function refreshAuth(loadCard=false){
   const {data}=await sb.auth.getSession(); session=data.session; user=session?.user||null;
   $("accountPill").textContent=user?"My account":"Sign in";
   $("signedOutBox").style.display=user?"none":"block"; $("signedInBox").style.display=user?"block":"none";
-  if(user){$("userEmail").textContent=user.email||""; await loadOwnerCard();}
+  if(user){
+    $("userEmail").textContent=user.email||"";
+    if(loadCard) await loadOwnerCard();
+  } else {
+    currentCard=null;
+  }
 }
 async function saveCloud(){
   if(!user){msg("Please sign in before saving your DShario online.","info");setView("account");return}
@@ -264,11 +269,11 @@ $("slug").addEventListener("input",()=>{$("slug").value=slugify($("slug").value)
 
 $("saveCloudBtn").onclick=saveCloud; $("deleteBtn").onclick=deleteCard;
 $("previewBtn").onclick=()=>{const d=getForm(); render({...d,id:currentCard?.id}); setView("card")};
-$("editCardBtn").onclick=()=>{if(!user){setView("account");msg("Sign in to edit your saved DShario.","info");return} setForm(currentCard||{});setView("edit")};
-$("myTab").onclick=()=>setView("card"); $("editTab").onclick=()=>{if(!user){setView("account");msg("Sign in or create an account to save DShario online.","info")}else{setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
+$("editCardBtn").onclick=async()=>{if(!user){setView("account");msg("Sign in to edit your saved DShario.","info");return} if(!currentCard) await loadOwnerCard(); setForm(currentCard||{});setView("edit")};
+$("myTab").onclick=async()=>{if(!user){setView("account");return} await loadOwnerCard(); setView(currentCard?"card":"edit")}; $("editTab").onclick=async()=>{if(!user){setView("account");msg("Sign in or create an account to save DShario online.","info")}else{if(!currentCard) await loadOwnerCard();setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
 
 function setAuthMode(mode){authMode=mode;$("signInMode").classList.toggle("active",mode==="signin");$("signUpMode").classList.toggle("active",mode==="signup");$("authSubmit").textContent=mode==="signin"?"Sign in":"Create account";$("authPassword").autocomplete=mode==="signin"?"current-password":"new-password"}
-$("homeCreateBtn").onclick=()=>{if(user){setView("edit")}else{setAuthMode("signup");setView("account")}};
+$("homeCreateBtn").onclick=async()=>{if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}};
 $("homeSigninBtn").onclick=()=>{setAuthMode("signin");setView("account")};
 $("signInMode").onclick=()=>setAuthMode("signin"); $("signUpMode").onclick=()=>setAuthMode("signup");
 $("authSubmit").onclick=async()=>{
@@ -281,15 +286,17 @@ $("authSubmit").onclick=async()=>{
   }else{
     const {error}=await sb.auth.signInWithPassword({email,password});
     if(error){$("authStatus").textContent=error.message;return}
-    $("authStatus").textContent="Signed in."; await refreshAuth(); setView(currentCard?"card":"edit"); msg("Signed in successfully.","ok");
+    $("authStatus").textContent="Signed in."; await refreshAuth(true); setView(currentCard?"card":"edit"); msg("Signed in successfully.","ok");
   }
 };
 $("signOutBtn").onclick=async()=>{await sb.auth.signOut();user=null;session=null;currentCard=null;render(null);setView("account");await refreshAuth();msg("Signed out.","info")};
 sb.auth.onAuthStateChange(async(event,s)=>{
   session=s; user=s?.user||null;
   if(publicMode) return;
-  await refreshAuth();
-  if(createMode) setView(user ? "edit" : "account");
+  await refreshAuth(false);
+  if(createMode){
+    if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}
+  }
 });
 
 $("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("DShario copied.","ok")}catch{prompt("Copy this DShario:",u)}};
@@ -359,14 +366,18 @@ $("pngBtn").onclick=async()=>{
     return;
   }
 
-  await refreshAuth();
+  // The main DShario URL must always stay a neutral public landing page.
+  // Do not preload/render the signed-in owner's personal card here.
+  await refreshAuth(false);
+  currentCard=null;
+  render(null);
   publicMode=false;
   $("tabs").style.display="grid";
   $("publicHeader").style.display="none";
   $("accountPill").style.display="inline-block";
 
   if(createMode){
-    if(user){setView("edit")}else{setAuthMode("signup");setView("account")}
+    if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}
     return;
   }
 
