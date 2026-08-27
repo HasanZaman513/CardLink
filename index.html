@@ -122,7 +122,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
   </div>
   <div class="privacyNotice">
     <strong>Privacy notice:</strong> DShario uses the information you enter to create, save and display your digital card. Your card is designed to be public and may be viewed by anyone who has its link. Only add contact details you are comfortable making public. Your account and card data are processed using Supabase. You can edit your card or delete it from your account.
-    <button type="button" class="openPrivacy">Read Privacy Policy</button>
+    <button type="button" class="openPrivacy">Read Privacy Policy</button> • <button type="button" class="openTerms">Terms of Use</button>
   </div>
   <div class="actions">
     <button id="saveCloudBtn" class="btn">Save My DShario Online</button>
@@ -152,7 +152,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
     <div class="switches"><button id="signInMode" class="switchBtn active">Sign in</button><button id="signUpMode" class="switchBtn">Create account</button></div>
     <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
     <div class="field" style="margin-top:12px"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
-    <div class="privacyNotice" style="margin-top:12px">By creating an account, you acknowledge the <button type="button" class="openPrivacy">DShario Privacy Policy</button>. Your account email is used for authentication and account access.</div>
+    <div class="privacyNotice" style="margin-top:12px">By creating an account, you acknowledge the <button type="button" class="openPrivacy">DShario Privacy Policy</button> and agree to the <button type="button" class="openTerms">Terms of Use</button>. Your account email is used for authentication and account access.</div>
     <div class="actions"><button id="authSubmit" class="btn">Sign in</button></div>
     <div id="authStatus" class="authStatus">New users must confirm their email before first sign-in.</div>
   </div>
@@ -164,7 +164,65 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 </div>
 </section>
 
-<div class="footer">DShario • Keep in touch.<div class="privacyLinks"><button type="button" class="openPrivacy">Privacy Policy</button></div></div>
+<div class="footer">DShario • Keep in touch.<div class="privacyLinks"><button type="button" class="openPrivacy">Privacy Policy</button><button type="button" class="openTerms">Terms of Use</button></div></div>
+</div>
+
+
+<div id="termsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+  <div class="modalBox">
+    <button id="termsClose" class="modalClose" type="button">Close</button>
+    <h1 id="termsTitle">DShario Terms of Use</h1>
+    <p><strong>Last updated: 28 August 2026</strong></p>
+
+    <p>These Terms of Use apply when you access or use the DShario website and prototype service. By creating an account or using DShario, you agree to these Terms. If you do not agree, please do not create an account or use the service.</p>
+
+    <h2>1. About DShario</h2>
+    <p>DShario is currently an early-stage prototype that lets users create and share digital business/contact cards. Features may change as the service is tested and developed.</p>
+
+    <h2>2. Eligibility and accounts</h2>
+    <p>You must provide accurate account information and keep your sign-in credentials secure. You are responsible for activity carried out through your account. DShario is intended for professional networking and is not designed for use by children.</p>
+
+    <h2>3. Information you publish</h2>
+    <p>You control the information you add to your DShario card. Cards are designed to be shared publicly, so information placed on a public card may be viewed, copied, saved or shared by other people. Do not publish information you want to keep private.</p>
+
+    <h2>4. Your responsibility for content</h2>
+    <p>You must only upload or publish information, photographs, logos, links and other material that you own or have permission to use. You must not impersonate another person, misrepresent your identity or affiliation, or publish another person's personal information without appropriate permission.</p>
+
+    <h2>5. Acceptable use</h2>
+    <p>You must not use DShario for unlawful, fraudulent, deceptive, abusive, harassing or harmful purposes; distribute malware or malicious links; interfere with the service or another user's account; attempt unauthorised access; or use the service in a way that infringes another person's rights.</p>
+
+    <h2>6. Prototype availability</h2>
+    <p>DShario is provided as a developing prototype. We may fix, change, add or remove prototype features as development continues. We do not promise uninterrupted or error-free availability. Where reasonably practicable, material changes affecting users will be communicated transparently.</p>
+
+    <h2>7. Third-party services and links</h2>
+    <p>DShario currently relies on third-party technology and hosting services, including Supabase and website-hosting infrastructure, and may link to external services such as social networks. Those third parties operate under their own terms and privacy practices. DShario does not control third-party websites or services.</p>
+
+    <h2>8. Intellectual property</h2>
+    <p>DShario's name, branding, interface and original service materials remain the property of their respective owner(s). You retain ownership of content you provide. You give DShario permission to process, store and display that content only as reasonably necessary to operate your account, create your card and provide the features you request.</p>
+
+    <h2>9. Removing your card and account-related information</h2>
+    <p>You can edit your card and the current prototype provides a Delete Card function. If you need help with account-related information, contact DShario through its official LinkedIn Page until a dedicated support address is established.</p>
+
+    <h2>10. No prohibited exclusion of legal rights</h2>
+    <p>Nothing in these Terms excludes, restricts or modifies any right, guarantee, remedy or protection that cannot lawfully be excluded under the Australian Consumer Law or other applicable law.</p>
+
+    <h2>11. Responsibility and liability</h2>
+    <p>To the extent permitted by law, DShario is not responsible for loss caused solely by information a user chooses to publish publicly, misuse of a shared public-card link by another person, or the independent operation of third-party services. This clause does not exclude or limit liability where doing so would be unlawful.</p>
+
+    <h2>12. Suspension or misuse</h2>
+    <p>Access may be restricted where reasonably necessary to protect users or the service, investigate suspected misuse, comply with law, or respond to a serious breach of these Terms. We will not use this clause to remove rights that cannot lawfully be excluded.</p>
+
+    <h2>13. Changes to these Terms</h2>
+    <p>These Terms may be updated as DShario develops. Material changes will be reflected by updating the date and publishing the revised Terms. If a change materially affects existing users, reasonable notice should be provided where practicable.</p>
+
+    <h2>14. Governing law</h2>
+    <p>These Terms are governed by the laws applicable in South Australia, Australia, subject to any rights you have under laws that cannot lawfully be excluded.</p>
+
+    <h2>15. Contact</h2>
+    <p>For questions about these Terms, contact DShario through the official DShario LinkedIn Page. A dedicated support/contact address should be added before a full commercial launch.</p>
+
+    <p><strong>Prototype notice:</strong> DShario is currently being tested and developed and is not presented as a finished commercial service.</p>
+  </div>
 </div>
 
 <div id="privacyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
@@ -223,6 +281,11 @@ const SUPABASE_KEY = "sb_publishable__w8lTUIFplSuEz5E1zJ3tw_rCps9SkA";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = id => document.getElementById(id);
+function openTerms(){ $("termsModal").classList.add("show"); document.body.style.overflow="hidden"; }
+function closeTerms(){ $("termsModal").classList.remove("show"); document.body.style.overflow=""; }
+document.querySelectorAll(".openTerms").forEach(b=>b.addEventListener("click",openTerms));
+$("termsClose").addEventListener("click",closeTerms);
+$("termsModal").addEventListener("click",e=>{if(e.target===$("termsModal"))closeTerms()});
 function openPrivacy(){ $("privacyModal").classList.add("show"); document.body.style.overflow="hidden"; }
 function closePrivacy(){ $("privacyModal").classList.remove("show"); document.body.style.overflow=""; }
 document.querySelectorAll(".openPrivacy").forEach(b=>b.addEventListener("click",openPrivacy));
