@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>CardLink — Create once. Share anywhere.</title>
+<title>DShario — Keep in touch.</title>
 <meta name="theme-color" content="#ffffff">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -28,7 +28,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 <body>
 <div class="app">
 <header class="header">
-  <div class="brand"><span class="brandIcon">CL</span><span>CardLink</span></div>
+  <div class="brand"><span class="brandIcon">DS</span><span>DShario</span></div>
   <button id="accountPill" class="accountPill">Sign in</button>
 </header>
 
@@ -39,7 +39,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 </div>
 
 <div id="notice" class="notice"></div>
-<div id="publicHeader" class="publicHeader">Public CardLink • No account required to view</div>
+<div id="publicHeader" class="publicHeader">Public DShario • No account required to view</div>
 
 <section id="cardView" class="view active">
 <div class="cardWrap">
@@ -58,7 +58,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
       <a id="fbRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">f</span><span class="ct">Facebook</span></a>
       <a id="igRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">◎</span><span class="ct">Instagram</span></a>
     </div>
-    <div class="cl">CL</div>
+    <div class="cl">DS</div>
   </div>
 
   <div id="savedBanner" class="saved" style="display:none">✓ Saved online — sign in from another device to open My Card</div>
@@ -68,32 +68,32 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
     <a id="callBtn" class="actionBtn call" href="#" style="display:none">☎ Call</a>
     <a id="emailBtn" class="actionBtn email" href="#" style="display:none">✉ Email</a>
     <button id="waBtn" class="actionBtn wa">◉ Share on WhatsApp</button>
-    <button id="shareBtn" class="actionBtn share">⌯ Share CardLink</button>
+    <button id="shareBtn" class="actionBtn share">⌯ Share DShario</button>
     <button id="copyBtn" class="actionBtn">🔗 Copy Link</button>
     <button id="qrBtn" class="actionBtn">▦ QR Code</button>
     <button id="editCardBtn" class="actionBtn">✎ Edit Card</button>
     <button id="vcfBtn" class="actionBtn">＋ Save Contact</button>
     <button id="pngBtn" class="actionBtn full">⇩ Download as Image</button>
   </div>
-  <div id="qrPanel" class="qr"><img id="qrImg" alt="QR code"><div><strong>Scan to open this CardLink</strong><div id="qrText" class="qrText"></div></div></div>
+  <div id="qrPanel" class="qr"><img id="qrImg" alt="QR code"><div><strong>Scan to open this DShario</strong><div id="qrText" class="qrText"></div></div></div>
 </div>
 </section>
 
 <section id="editView" class="view">
 <div class="panel">
-  <h1>Create or edit your CardLink</h1>
-  <p class="lead">Your CardLink is saved online to your account. Edit it only when your details change.</p>
-  <div id="loginNeeded" class="notice info show" style="display:none">Please sign in or create an account before saving a CardLink online.</div>
+  <h1>Create or edit your DShario</h1>
+  <p class="lead">Your DShario is saved online to your account. Edit it only when your details change.</p>
+  <div id="loginNeeded" class="notice info show" style="display:none">Please sign in or create an account before saving a DShario online.</div>
   <div class="grid">
-    <div class="field"><label>Personal CardLink name *</label><input id="slug" placeholder="e.g. hasan-zaman"><span class="hint">Your permanent link will use this name. Letters, numbers and hyphens only.</span></div>
+    <div class="field"><label>Personal DShario name *</label><input id="slug" placeholder="e.g. hasan-zaman"><span class="hint">Your permanent link will use this name. Letters, numbers and hyphens only.</span></div>
     <div class="field"><label>Full name *</label><input id="full_name" placeholder="Your name"></div>
     <div class="field"><label>Profession / job title</label><input id="job_title" placeholder="e.g. Industrial Pharmacist"></div>
     <div class="field"><label>Company / organisation</label><input id="company" placeholder="Optional"></div>
     <div class="field full"><label>Short introduction</label><textarea id="description" placeholder="A short professional introduction"></textarea></div>
     <div class="field"><label>Location</label><input id="location" placeholder="City, country"></div>
     <div class="field"><label>Website</label><input id="website" placeholder="https://..."></div>
-    <div class="field"><label>Mobile number</label><input id="phone" placeholder="+61..."><label class="check"><input id="show_phone" type="checkbox" checked> Show on public CardLink</label></div>
-    <div class="field"><label>Email address</label><input id="email" type="email" placeholder="you@example.com"><label class="check"><input id="show_email" type="checkbox" checked> Show on public CardLink</label></div>
+    <div class="field"><label>Mobile number</label><input id="phone" placeholder="+61..."><label class="check"><input id="show_phone" type="checkbox" checked> Show on public DShario</label></div>
+    <div class="field"><label>Email address</label><input id="email" type="email" placeholder="you@example.com"><label class="check"><input id="show_email" type="checkbox" checked> Show on public DShario</label></div>
     <div class="field"><label>WhatsApp number</label><input id="whatsapp" placeholder="+61..."></div>
     <div class="field"><label>LinkedIn (optional)</label><input id="linkedin_url" placeholder="https://linkedin.com/in/..."></div>
     <div class="field"><label>Facebook (optional)</label><input id="facebook_url" placeholder="https://facebook.com/..."></div>
@@ -105,7 +105,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
     </div>
   </div>
   <div class="actions">
-    <button id="saveCloudBtn" class="btn">Save My CardLink Online</button>
+    <button id="saveCloudBtn" class="btn">Save My DShario Online</button>
     <button id="previewBtn" class="btn secondary">Preview</button>
     <button id="deleteBtn" class="btn danger" style="display:none">Delete Card</button>
   </div>
@@ -114,8 +114,8 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 
 <section id="accountView" class="view">
 <div class="panel authBox">
-  <h1>CardLink account</h1>
-  <p class="lead">Sign in to save your CardLink online and access it from another device.</p>
+  <h1>DShario account</h1>
+  <p class="lead">Sign in to save your DShario online and access it from another device.</p>
   <div id="signedOutBox">
     <div class="switches"><button id="signInMode" class="switchBtn active">Sign in</button><button id="signUpMode" class="switchBtn">Create account</button></div>
     <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
@@ -125,16 +125,22 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
   </div>
   <div id="signedInBox" style="display:none">
     <div class="saved">✓ Signed in as <span id="userEmail"></span></div>
-    <p class="lead">Your CardLink is linked to this account.</p>
+    <p class="lead">Your DShario is linked to this account.</p>
     <button id="signOutBtn" class="btn ghost">Sign out</button>
   </div>
 </div>
 </section>
 
-<div class="footer">CardLink • Create once • Save • Share anywhere</div>
+<div class="footer">DShario • Keep in touch.</div>
 </div>
 
 <script>
+try {
+  if (!localStorage.getItem('dshario-profile') && localStorage.getItem('cardlink-profile')) {
+    localStorage.setItem('dshario-profile', localStorage.getItem('cardlink-profile'));
+  }
+} catch (e) {}
+
 const SUPABASE_URL = "https://ajvpiiqcvjngiovdzlun.supabase.co";
 const SUPABASE_KEY = "sb_publishable__w8lTUIFplSuEz5E1zJ3tw_rCps9SkA";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -151,7 +157,7 @@ function msg(text,type="ok"){
 }
 function cleanUrl(v){if(!v)return ""; return /^https?:\/\//i.test(v)?v:"https://"+v;}
 function slugify(v){return (v||"").toLowerCase().trim().replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
-function safeName(v){return (v||"cardlink").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"cardlink";}
+function safeName(v){return (v||"dshario").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"dshario";}
 function contrast(bg){const h=(bg||"#eff6ff").replace("#","");if(h.length!==6)return "#0f172a";const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return ((r*299+g*587+b*114)/1000)>160?"#0f172a":"#ffffff";}
 function muted(bg){return contrast(bg)==="#ffffff"?"rgba(255,255,255,.82)":"#5b6b83";}
 function shareUrl(card=currentCard){return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug) : location.origin+location.pathname;}
@@ -200,7 +206,7 @@ async function loadPublicCard(slug){
   publicMode=true; $("tabs").style.display="none"; $("publicHeader").style.display="block"; $("accountPill").style.display="none";
   const {data,error}=await sb.rpc("get_public_card",{card_slug:slug});
   const card=Array.isArray(data)?data[0]:data;
-  if(error||!card){render(null);msg("This CardLink was not found or is private.","err");return}
+  if(error||!card){render(null);msg("This DShario was not found or is private.","err");return}
   render(card); setView("card");
 }
 async function refreshAuth(){
@@ -210,20 +216,20 @@ async function refreshAuth(){
   if(user){$("userEmail").textContent=user.email||""; await loadOwnerCard();}
 }
 async function saveCloud(){
-  if(!user){msg("Please sign in before saving your CardLink online.","info");setView("account");return}
-  const d=getForm(); if(!d.full_name){msg("Please enter your full name.","err");return} if(!d.slug){msg("Please choose your personal CardLink name.","err");return}
+  if(!user){msg("Please sign in before saving your DShario online.","info");setView("account");return}
+  const d=getForm(); if(!d.full_name){msg("Please enter your full name.","err");return} if(!d.slug){msg("Please choose your personal DShario name.","err");return}
   const payload={...d,user_id:user.id,updated_at:new Date().toISOString()};
   let res;
   if(currentCard?.id) res=await sb.from("cards").update(payload).eq("id",currentCard.id).select().single();
   else res=await sb.from("cards").insert(payload).select().single();
   if(res.error){
-    const m=res.error.message.includes("duplicate")?"That CardLink name is already taken. Please choose another.":res.error.message;
+    const m=res.error.message.includes("duplicate")?"That DShario name is already taken. Please choose another.":res.error.message;
     msg("Could not save: "+m,"err"); return;
   }
-  currentCard=res.data; render(currentCard); setForm(currentCard); $("deleteBtn").style.display="inline-block"; setView("card"); msg("✓ CardLink saved online. You can now share the same permanent link.","ok");
+  currentCard=res.data; render(currentCard); setForm(currentCard); $("deleteBtn").style.display="inline-block"; setView("card"); msg("✓ DShario saved online. You can now share the same permanent link.","ok");
 }
 async function deleteCard(){
-  if(!user||!currentCard?.id)return; if(!confirm("Delete this CardLink permanently?"))return;
+  if(!user||!currentCard?.id)return; if(!confirm("Delete this DShario permanently?"))return;
   const {error}=await sb.from("cards").delete().eq("id",currentCard.id);
   if(error){msg(error.message,"err");return}
   currentCard=null;setForm({card_color:"#eff6ff"});render(null);$("deleteBtn").style.display="none";setView("edit");msg("Card deleted.","info");
@@ -238,8 +244,8 @@ $("slug").addEventListener("input",()=>{$("slug").value=slugify($("slug").value)
 
 $("saveCloudBtn").onclick=saveCloud; $("deleteBtn").onclick=deleteCard;
 $("previewBtn").onclick=()=>{const d=getForm(); render({...d,id:currentCard?.id}); setView("card")};
-$("editCardBtn").onclick=()=>{if(!user){setView("account");msg("Sign in to edit your saved CardLink.","info");return} setForm(currentCard||{});setView("edit")};
-$("myTab").onclick=()=>setView("card"); $("editTab").onclick=()=>{if(!user){setView("account");msg("Sign in or create an account to save CardLink online.","info")}else{setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
+$("editCardBtn").onclick=()=>{if(!user){setView("account");msg("Sign in to edit your saved DShario.","info");return} setForm(currentCard||{});setView("edit")};
+$("myTab").onclick=()=>setView("card"); $("editTab").onclick=()=>{if(!user){setView("account");msg("Sign in or create an account to save DShario online.","info")}else{setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
 
 function setAuthMode(mode){authMode=mode;$("signInMode").classList.toggle("active",mode==="signin");$("signUpMode").classList.toggle("active",mode==="signup");$("authSubmit").textContent=mode==="signin"?"Sign in":"Create account";$("authPassword").autocomplete=mode==="signin"?"current-password":"new-password"}
 $("signInMode").onclick=()=>setAuthMode("signin"); $("signUpMode").onclick=()=>setAuthMode("signup");
@@ -259,9 +265,9 @@ $("authSubmit").onclick=async()=>{
 $("signOutBtn").onclick=async()=>{await sb.auth.signOut();user=null;session=null;currentCard=null;render(null);setView("account");await refreshAuth();msg("Signed out.","info")};
 sb.auth.onAuthStateChange(async(event,s)=>{session=s;user=s?.user||null;if(!publicMode)await refreshAuth()});
 
-$("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("CardLink copied.","ok")}catch{prompt("Copy this CardLink:",u)}};
-$("shareBtn").onclick=async()=>{const u=shareUrl(),c=currentCard||{};if(navigator.share){try{await navigator.share({title:(c.full_name||"My")+" CardLink",text:[c.full_name,c.job_title,c.company].filter(Boolean).join(" • "),url:u})}catch{}}else $("copyBtn").click()};
-$("waBtn").onclick=()=>{const c=currentCard||{},u=shareUrl(),t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my CardLink")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
+$("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("DShario copied.","ok")}catch{prompt("Copy this DShario:",u)}};
+$("shareBtn").onclick=async()=>{const u=shareUrl(),c=currentCard||{};if(navigator.share){try{await navigator.share({title:(c.full_name||"My")+" DShario",text:[c.full_name,c.job_title,c.company].filter(Boolean).join(" • "),url:u})}catch{}}else $("copyBtn").click()};
+$("waBtn").onclick=()=>{const c=currentCard||{},u=shareUrl(),t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my DShario")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
 $("qrBtn").onclick=()=>{$("qrPanel").classList.toggle("show")};
 
 function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
@@ -269,180 +275,10 @@ $("vcfBtn").onclick=()=>{const d=currentCard||{};if(!d.full_name)return;const es
 
 function loadImg(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src})}
 $("pngBtn").onclick=async()=>{
-  const d=currentCard||{};
-  const W=1200,pad=70;
-
-  const temp=document.createElement("canvas");
-  temp.width=W;
-  const m=temp.getContext("2d");
-
-  function wrap(text,maxWidth,font){
-    if(!text)return[];
-    m.font=font;
-    const words=String(text).split(/\s+/);
-    const lines=[];
-    let line="";
-    for(const word of words){
-      const test=line?line+" "+word:word;
-      if(m.measureText(test).width>maxWidth && line){
-        lines.push(line);
-        line=word;
-      }else{
-        line=test;
-      }
-    }
-    if(line)lines.push(line);
-    return lines;
-  }
-
-  const bg=d.card_color||"#eff6ff";
-  const fg=contrast(bg);
-  const mt=muted(bg);
-
-  const hasPhoto=!!d.photo_url;
-  const textX=hasPhoto?225:pad;
-  const textWidth=W-textX-pad;
-
-  const nameLines=wrap(
-    d.full_name||"Your name",
-    textWidth,
-    "900 52px Arial"
-  );
-
-  const descLines=wrap(
-    d.description||"",
-    W-(pad*2),
-    "23px Arial"
-  );
-
-  const contacts=[];
-  if(d.location) contacts.push("Location: "+d.location);
-  if(d.phone) contacts.push("Phone: "+d.phone);
-  if(d.email) contacts.push("Email: "+d.email);
-  if(d.website) contacts.push("Website: "+d.website);
-  if(d.linkedin_url) contacts.push("LinkedIn: "+d.linkedin_url);
-  if(d.facebook_url) contacts.push("Facebook: "+d.facebook_url);
-  if(d.instagram_url) contacts.push("Instagram: "+d.instagram_url);
-
-  let headerHeight=Math.max(
-    hasPhoto?112:0,
-    (nameLines.length*58)+
-    (d.job_title?40:0)+
-    (d.company?38:0)
-  );
-
-  const H=Math.max(
-    540,
-    pad+
-    headerHeight+
-    (descLines.length?28+(descLines.length*31):0)+
-    (contacts.length?35+(contacts.length*39):0)+
-    80
-  );
-
-  const c=document.createElement("canvas");
-  c.width=W;
-  c.height=H;
-  const x=c.getContext("2d");
-
-  x.fillStyle=bg;
-  x.fillRect(0,0,W,H);
-
-  if(hasPhoto){
-    try{
-      const img=await loadImg(d.photo_url);
-      x.save();
-      x.beginPath();
-      if(x.roundRect){
-        x.roundRect(pad,pad,112,112,24);
-      }else{
-        x.rect(pad,pad,112,112);
-      }
-      x.clip();
-
-      const s=Math.max(112/img.width,112/img.height);
-      const w=img.width*s;
-      const h=img.height*s;
-
-      x.drawImage(
-        img,
-        pad+(112-w)/2,
-        pad+(112-h)/2,
-        w,h
-      );
-      x.restore();
-    }catch{}
-  }
-
-  let y=pad+48;
-
-  x.fillStyle=fg;
-  x.font="900 52px Arial";
-
-  for(const line of nameLines){
-    x.fillText(line,textX,y);
-    y+=58;
-  }
-
-  if(d.job_title){
-    x.fillStyle=mt;
-    x.font="700 29px Arial";
-    x.fillText(d.job_title,textX,y+4);
-    y+=40;
-  }
-
-  if(d.company){
-    x.fillStyle=fg;
-    x.font="800 27px Arial";
-    x.fillText(d.company,textX,y+4);
-    y+=38;
-  }
-
-  y=Math.max(y,hasPhoto?pad+112:0);
-
-  if(descLines.length){
-    y+=28;
-    x.fillStyle=mt;
-    x.font="23px Arial";
-
-    for(const line of descLines){
-      x.fillText(line,pad,y);
-      y+=31;
-    }
-  }
-
-  if(contacts.length){
-    y+=35;
-    x.fillStyle=fg;
-    x.font="700 21px Arial";
-
-    for(const item of contacts){
-      const lines=wrap(
-        item,
-        W-(pad*2),
-        "700 21px Arial"
-      );
-
-      for(const line of lines){
-        x.fillText(line,pad,y);
-        y+=30;
-      }
-      y+=9;
-    }
-  }
-
-  x.fillStyle=fg;
-  x.textAlign="right";
-  x.font="900 24px Arial";
-  x.fillText("CL",W-pad,H-38);
-
-  c.toBlob(
-    b=>downloadBlob(
-      b,
-      safeName(d.full_name)+"-card.png"
-    ),
-    "image/png"
-  );
+  const d=currentCard||{};const c=document.createElement("canvas");c.width=1200;c.height=720;const x=c.getContext("2d"),bg=d.card_color||"#eff6ff",fg=contrast(bg),mt=muted(bg);x.fillStyle=bg;x.fillRect(0,0,1200,720);
+  if(d.photo_url){try{const img=await loadImg(d.photo_url);x.save();x.beginPath();if(x.roundRect)x.roundRect(70,52,112,112,24);else x.rect(70,52,112,112);x.clip();const s=Math.max(112/img.width,112/img.height),w=img.width*s,h=img.height*s;x.drawImage(img,70+(112-w)/2,52+(112-h)/2,w,h);x.restore()}catch{}}
+  x.fillStyle=fg;x.font="900 52px Arial";x.fillText(d.full_name||"Your name",70,270);x.fillStyle=mt;x.font="700 29px Arial";x.fillText(d.job_title||"",70,322);x.fillStyle=fg;x.font="800 27px Arial";x.fillText(d.company||"",70,367);x.fillStyle=mt;x.font="23px Arial";x.fillText(d.description||"",70,418);
+  let y=530;x.fillStyle=fg;x.font="700 21px Arial";if(d.location){x.fillText("⌖  "+d.location,70,y);y+=37}if(d.phone){x.fillText("☎  "+d.phone,70,y);y+=37}if(d.email)x.fillText("✉  "+d.email,70,y);x.textAlign="right";x.font="900 24px Arial";x.fillText("DS",1130,670);c.toBlob(b=>downloadBlob(b,safeName(d.full_name)+"-card.png"),"image/png");
 };
 
 (async function init(){
