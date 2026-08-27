@@ -275,10 +275,53 @@ $("vcfBtn").onclick=()=>{const d=currentCard||{};if(!d.full_name)return;const es
 
 function loadImg(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src})}
 $("pngBtn").onclick=async()=>{
-  const d=currentCard||{};const c=document.createElement("canvas");c.width=1200;c.height=720;const x=c.getContext("2d"),bg=d.card_color||"#eff6ff",fg=contrast(bg),mt=muted(bg);x.fillStyle=bg;x.fillRect(0,0,1200,720);
-  if(d.photo_url){try{const img=await loadImg(d.photo_url);x.save();x.beginPath();if(x.roundRect)x.roundRect(70,52,112,112,24);else x.rect(70,52,112,112);x.clip();const s=Math.max(112/img.width,112/img.height),w=img.width*s,h=img.height*s;x.drawImage(img,70+(112-w)/2,52+(112-h)/2,w,h);x.restore()}catch{}}
-  x.fillStyle=fg;x.font="900 52px Arial";x.fillText(d.full_name||"Your name",70,270);x.fillStyle=mt;x.font="700 29px Arial";x.fillText(d.job_title||"",70,322);x.fillStyle=fg;x.font="800 27px Arial";x.fillText(d.company||"",70,367);x.fillStyle=mt;x.font="23px Arial";x.fillText(d.description||"",70,418);
-  let y=530;x.fillStyle=fg;x.font="700 21px Arial";if(d.location){x.fillText("⌖  "+d.location,70,y);y+=37}if(d.phone){x.fillText("☎  "+d.phone,70,y);y+=37}if(d.email)x.fillText("✉  "+d.email,70,y);x.textAlign="right";x.font="900 24px Arial";x.fillText("DS",1130,670);c.toBlob(b=>downloadBlob(b,safeName(d.full_name)+"-card.png"),"image/png");
+  const d=currentCard||{};
+  const c=document.createElement("canvas");c.width=1200;c.height=630;
+  const x=c.getContext("2d"),bg=d.card_color||"#eff6ff",fg=contrast(bg),mt=muted(bg);
+  x.fillStyle=bg;x.fillRect(0,0,1200,630);
+
+  x.strokeStyle="rgba(30,64,175,.16)";x.lineWidth=3;
+  x.beginPath();if(x.roundRect)x.roundRect(24,24,1152,582,34);else x.rect(24,24,1152,582);x.stroke();
+
+  let tx=330;
+  if(d.photo_url){
+    try{
+      const img=await loadImg(d.photo_url);
+      x.save();x.beginPath();if(x.roundRect)x.roundRect(70,80,200,200,32);else x.rect(70,80,200,200);x.clip();
+      const s=Math.max(200/img.width,200/img.height),w=img.width*s,h=img.height*s;
+      x.drawImage(img,70+(200-w)/2,80+(200-h)/2,w,h);x.restore();
+    }catch{}
+  }else tx=80;
+
+  x.textAlign="left";x.textBaseline="top";
+  x.fillStyle=fg;x.font="900 50px Arial";x.fillText(d.full_name||"My DShario",tx,86,790);
+
+  let y=158;
+  const line=(v,font,color=mt)=>{
+    v=(v||"").trim();if(!v)return;
+    x.fillStyle=color;x.font=font;x.fillText(v,tx,y,790);y+=44;
+  };
+  line(d.job_title,"700 28px Arial");
+  line(d.company,"800 28px Arial",fg);
+
+  const desc=(d.description||"").trim();
+  if(desc){
+    y+=10;x.fillStyle=mt;x.font="23px Arial";
+    let row="", words=desc.split(/\s+/);
+    for(const word of words){
+      const test=row?row+" "+word:word;
+      if(x.measureText(test).width>760&&row){x.fillText(row,tx,y);y+=34;row=word}else row=test;
+    }
+    if(row)x.fillText(row,tx,y);y+=40;
+  }
+
+  if(d.location){x.fillStyle=fg;x.font="700 22px Arial";x.fillText("⌖  "+d.location,tx,Math.min(y+8,465),780)}
+
+  x.fillStyle=fg;x.font="900 28px Arial";x.fillText("DS",70,538);
+  x.font="800 23px Arial";x.fillText("DShario",122,542);
+  x.textAlign="right";x.fillStyle=mt;x.font="22px Arial";x.fillText("Keep in touch.",1130,542);
+
+  c.toBlob(b=>downloadBlob(b,safeName(d.full_name||"dshario")+"-card.png"),"image/png");
 };
 
 (async function init(){
