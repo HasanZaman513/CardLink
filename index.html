@@ -269,10 +269,180 @@ $("vcfBtn").onclick=()=>{const d=currentCard||{};if(!d.full_name)return;const es
 
 function loadImg(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src})}
 $("pngBtn").onclick=async()=>{
-  const d=currentCard||{};const c=document.createElement("canvas");c.width=1200;c.height=720;const x=c.getContext("2d"),bg=d.card_color||"#eff6ff",fg=contrast(bg),mt=muted(bg);x.fillStyle=bg;x.fillRect(0,0,1200,720);
-  if(d.photo_url){try{const img=await loadImg(d.photo_url);x.save();x.beginPath();if(x.roundRect)x.roundRect(70,52,112,112,24);else x.rect(70,52,112,112);x.clip();const s=Math.max(112/img.width,112/img.height),w=img.width*s,h=img.height*s;x.drawImage(img,70+(112-w)/2,52+(112-h)/2,w,h);x.restore()}catch{}}
-  x.fillStyle=fg;x.font="900 52px Arial";x.fillText(d.full_name||"Your name",70,270);x.fillStyle=mt;x.font="700 29px Arial";x.fillText(d.job_title||"",70,322);x.fillStyle=fg;x.font="800 27px Arial";x.fillText(d.company||"",70,367);x.fillStyle=mt;x.font="23px Arial";x.fillText(d.description||"",70,418);
-  let y=530;x.fillStyle=fg;x.font="700 21px Arial";if(d.location){x.fillText("⌖  "+d.location,70,y);y+=37}if(d.phone){x.fillText("☎  "+d.phone,70,y);y+=37}if(d.email)x.fillText("✉  "+d.email,70,y);x.textAlign="right";x.font="900 24px Arial";x.fillText("CL",1130,670);c.toBlob(b=>downloadBlob(b,safeName(d.full_name)+"-card.png"),"image/png");
+  const d=currentCard||{};
+  const W=1200,pad=70;
+
+  const temp=document.createElement("canvas");
+  temp.width=W;
+  const m=temp.getContext("2d");
+
+  function wrap(text,maxWidth,font){
+    if(!text)return[];
+    m.font=font;
+    const words=String(text).split(/\s+/);
+    const lines=[];
+    let line="";
+    for(const word of words){
+      const test=line?line+" "+word:word;
+      if(m.measureText(test).width>maxWidth && line){
+        lines.push(line);
+        line=word;
+      }else{
+        line=test;
+      }
+    }
+    if(line)lines.push(line);
+    return lines;
+  }
+
+  const bg=d.card_color||"#eff6ff";
+  const fg=contrast(bg);
+  const mt=muted(bg);
+
+  const hasPhoto=!!d.photo_url;
+  const textX=hasPhoto?225:pad;
+  const textWidth=W-textX-pad;
+
+  const nameLines=wrap(
+    d.full_name||"Your name",
+    textWidth,
+    "900 52px Arial"
+  );
+
+  const descLines=wrap(
+    d.description||"",
+    W-(pad*2),
+    "23px Arial"
+  );
+
+  const contacts=[];
+  if(d.location) contacts.push("Location: "+d.location);
+  if(d.phone) contacts.push("Phone: "+d.phone);
+  if(d.email) contacts.push("Email: "+d.email);
+  if(d.website) contacts.push("Website: "+d.website);
+  if(d.linkedin_url) contacts.push("LinkedIn: "+d.linkedin_url);
+  if(d.facebook_url) contacts.push("Facebook: "+d.facebook_url);
+  if(d.instagram_url) contacts.push("Instagram: "+d.instagram_url);
+
+  let headerHeight=Math.max(
+    hasPhoto?112:0,
+    (nameLines.length*58)+
+    (d.job_title?40:0)+
+    (d.company?38:0)
+  );
+
+  const H=Math.max(
+    430,
+    pad+
+    headerHeight+
+    (descLines.length?28+(descLines.length*31):0)+
+    (contacts.length?35+(contacts.length*39):0)+
+    80
+  );
+
+  const c=document.createElement("canvas");
+  c.width=W;
+  c.height=H;
+  const x=c.getContext("2d");
+
+  x.fillStyle=bg;
+  x.fillRect(0,0,W,H);
+
+  if(hasPhoto){
+    try{
+      const img=await loadImg(d.photo_url);
+      x.save();
+      x.beginPath();
+      if(x.roundRect){
+        x.roundRect(pad,pad,112,112,24);
+      }else{
+        x.rect(pad,pad,112,112);
+      }
+      x.clip();
+
+      const s=Math.max(112/img.width,112/img.height);
+      const w=img.width*s;
+      const h=img.height*s;
+
+      x.drawImage(
+        img,
+        pad+(112-w)/2,
+        pad+(112-h)/2,
+        w,h
+      );
+      x.restore();
+    }catch{}
+  }
+
+  let y=pad+48;
+
+  x.fillStyle=fg;
+  x.font="900 52px Arial";
+
+  for(const line of nameLines){
+    x.fillText(line,textX,y);
+    y+=58;
+  }
+
+  if(d.job_title){
+    x.fillStyle=mt;
+    x.font="700 29px Arial";
+    x.fillText(d.job_title,textX,y+4);
+    y+=40;
+  }
+
+  if(d.company){
+    x.fillStyle=fg;
+    x.font="800 27px Arial";
+    x.fillText(d.company,textX,y+4);
+    y+=38;
+  }
+
+  y=Math.max(y,hasPhoto?pad+112:0);
+
+  if(descLines.length){
+    y+=28;
+    x.fillStyle=mt;
+    x.font="23px Arial";
+
+    for(const line of descLines){
+      x.fillText(line,pad,y);
+      y+=31;
+    }
+  }
+
+  if(contacts.length){
+    y+=35;
+    x.fillStyle=fg;
+    x.font="700 21px Arial";
+
+    for(const item of contacts){
+      const lines=wrap(
+        item,
+        W-(pad*2),
+        "700 21px Arial"
+      );
+
+      for(const line of lines){
+        x.fillText(line,pad,y);
+        y+=30;
+      }
+      y+=9;
+    }
+  }
+
+  x.fillStyle=fg;
+  x.textAlign="right";
+  x.font="900 24px Arial";
+  x.fillText("CL",W-pad,H-38);
+
+  c.toBlob(
+    b=>downloadBlob(
+      b,
+      safeName(d.full_name)+"-card.png"
+    ),
+    "image/png"
+  );
 };
 
 (async function init(){
