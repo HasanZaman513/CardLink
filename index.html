@@ -30,6 +30,15 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 .homeActions{display:grid;gap:12px;max-width:390px;margin:0 auto}
 .homeActions button{width:100%;min-height:54px;font-size:17px}
 .homeNote{font-size:13px!important;color:#64748b!important;margin-top:16px!important}
+
+.privacyLinks{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+.privacyLinks button{border:0;background:transparent;color:#1d4ed8;text-decoration:underline;padding:4px;font-size:12px}
+.privacyNotice{grid-column:1/-1;background:#f8fbff;border:1px solid #dbe5f2;border-radius:12px;padding:12px 13px;font-size:12px;line-height:1.5;color:#475569}
+.privacyNotice button{border:0;background:transparent;color:#1d4ed8;text-decoration:underline;padding:0;font-weight:800}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:9999;padding:18px;overflow:auto}
+.modal.show{display:block}.modalBox{max-width:760px;margin:24px auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(15,23,42,.28)}
+.modalBox h1{margin:0 0 6px}.modalBox h2{font-size:18px;margin:22px 0 7px}.modalBox p,.modalBox li{color:#475569;line-height:1.6}.modalClose{float:right;border:1px solid #dbe5f2;background:#fff;border-radius:10px;padding:8px 11px;font-weight:800}
+
 </style>
 </head>
 <body>
@@ -111,6 +120,10 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
       <div class="photoRow"><div id="photoPreview" class="photoPreview">No photo</div><div><input id="photo" type="file" accept="image/*"><div style="margin-top:8px"><button id="removePhoto" class="mini" type="button">Remove photo</button></div><div class="hint">Compressed before cloud saving for this MVP.</div></div></div>
     </div>
   </div>
+  <div class="privacyNotice">
+    <strong>Privacy notice:</strong> DShario uses the information you enter to create, save and display your digital card. Your card is designed to be public and may be viewed by anyone who has its link. Only add contact details you are comfortable making public. Your account and card data are processed using Supabase. You can edit your card or delete it from your account.
+    <button type="button" class="openPrivacy">Read Privacy Policy</button>
+  </div>
   <div class="actions">
     <button id="saveCloudBtn" class="btn">Save My DShario Online</button>
     <button id="previewBtn" class="btn secondary">Preview</button>
@@ -139,6 +152,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
     <div class="switches"><button id="signInMode" class="switchBtn active">Sign in</button><button id="signUpMode" class="switchBtn">Create account</button></div>
     <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
     <div class="field" style="margin-top:12px"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
+    <div class="privacyNotice" style="margin-top:12px">By creating an account, you acknowledge the <button type="button" class="openPrivacy">DShario Privacy Policy</button>. Your account email is used for authentication and account access.</div>
     <div class="actions"><button id="authSubmit" class="btn">Sign in</button></div>
     <div id="authStatus" class="authStatus">New users must confirm their email before first sign-in.</div>
   </div>
@@ -150,7 +164,51 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 </div>
 </section>
 
-<div class="footer">DShario • Keep in touch.</div>
+<div class="footer">DShario • Keep in touch.<div class="privacyLinks"><button type="button" class="openPrivacy">Privacy Policy</button></div></div>
+</div>
+
+<div id="privacyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+  <div class="modalBox">
+    <button id="privacyClose" class="modalClose" type="button">Close</button>
+    <h1 id="privacyTitle">DShario Privacy Policy</h1>
+    <p><strong>Last updated: 28 August 2026</strong></p>
+    <p>DShario is currently a prototype digital business card service. This policy explains how personal information is handled when you create an account, create a card, or use DShario.</p>
+
+    <h2>1. Information we collect</h2>
+    <p>Depending on what you choose to provide, DShario may collect your account email address and information for your digital card, including your name, job title, organisation, introduction, location, website, phone number, email address, WhatsApp number, social-media links, profile image, chosen card name and card appearance.</p>
+
+    <h2>2. How we collect and use information</h2>
+    <p>We collect information directly from you when you create an account or enter information into DShario. We use it to authenticate your account, create and store your card, display the information you choose to publish, provide sharing and download features, and operate and improve the prototype.</p>
+
+    <h2>3. Public cards and your choices</h2>
+    <p>DShario cards are designed for sharing. Information included on a public card may be viewed, copied, saved or shared by anyone who receives or discovers the card link. Do not add information you do not want to make public. You are responsible for ensuring that you have permission to publish information about another person.</p>
+
+    <h2>4. Service providers and storage</h2>
+    <p>DShario currently uses Supabase for account authentication and cloud storage/database services. The website is currently delivered using GitHub Pages. A third-party QR-code service may receive the public card URL when a QR code is generated. These providers may process technical information as part of providing their services.</p>
+
+    <h2>5. Overseas processing</h2>
+    <p>Some service providers used by DShario may process or store information outside Australia. Because this prototype may change its hosting configuration, DShario does not currently promise a particular overseas storage country. This policy will be updated when the production hosting and data locations are finalised.</p>
+
+    <h2>6. Security</h2>
+    <p>We take reasonable steps appropriate to this prototype to protect account and card information. However, no internet service can guarantee absolute security. Please use a strong, unique password and avoid placing sensitive information on a public card.</p>
+
+    <h2>7. Access, correction and deletion</h2>
+    <p>You can sign in to review or update your DShario card. The current prototype also provides a Delete Card function. If you need help accessing, correcting or deleting information associated with your account, use the contact method published on the DShario LinkedIn Page until a dedicated privacy contact address is established.</p>
+
+    <h2>8. Retention</h2>
+    <p>Card information is kept while it is needed to provide your DShario account and card, unless you delete your card or the information must be retained for legitimate operational or legal reasons. As the prototype develops, retention practices may be refined and this policy updated.</p>
+
+    <h2>9. Children and sensitive information</h2>
+    <p>DShario is intended for professional networking and is not designed for children. Please do not submit sensitive information such as health information, government identifiers, financial information or passwords as card content.</p>
+
+    <h2>10. Privacy questions and complaints</h2>
+    <p>If you have a privacy question or complaint, contact DShario through its official LinkedIn Page. We will review the issue and respond within a reasonable time. A dedicated privacy email should be added before DShario moves beyond prototype testing.</p>
+
+    <h2>11. Changes to this policy</h2>
+    <p>DShario may update this policy as the prototype, service providers and information-handling practices change. The current version and update date will be published here.</p>
+
+    <p><strong>Important:</strong> This policy describes the current DShario prototype. It should be reviewed again before commercial launch or material changes to data collection, analytics, advertising, payments or third-party integrations.</p>
+  </div>
 </div>
 
 <script>
@@ -165,6 +223,12 @@ const SUPABASE_KEY = "sb_publishable__w8lTUIFplSuEz5E1zJ3tw_rCps9SkA";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = id => document.getElementById(id);
+function openPrivacy(){ $("privacyModal").classList.add("show"); document.body.style.overflow="hidden"; }
+function closePrivacy(){ $("privacyModal").classList.remove("show"); document.body.style.overflow=""; }
+document.querySelectorAll(".openPrivacy").forEach(b=>b.addEventListener("click",openPrivacy));
+$("privacyClose").addEventListener("click",closePrivacy);
+$("privacyModal").addEventListener("click",e=>{if(e.target===$("privacyModal"))closePrivacy()});
+
 let session = null, user = null, currentCard = null, photoData = "", authMode = "signin", publicMode = false;
 const createMode = new URLSearchParams(location.search).get("create") === "1";
 
