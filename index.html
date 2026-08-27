@@ -147,6 +147,7 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = id => document.getElementById(id);
 let session = null, user = null, currentCard = null, photoData = "", authMode = "signin", publicMode = false;
+const createMode = new URLSearchParams(location.search).get("create") === "1";
 
 const formIds = ["slug","full_name","job_title","company","description","location","website","phone","email","whatsapp","linkedin_url","facebook_url","instagram_url","card_color"];
 
@@ -263,7 +264,12 @@ $("authSubmit").onclick=async()=>{
   }
 };
 $("signOutBtn").onclick=async()=>{await sb.auth.signOut();user=null;session=null;currentCard=null;render(null);setView("account");await refreshAuth();msg("Signed out.","info")};
-sb.auth.onAuthStateChange(async(event,s)=>{session=s;user=s?.user||null;if(!publicMode)await refreshAuth()});
+sb.auth.onAuthStateChange(async(event,s)=>{
+  session=s; user=s?.user||null;
+  if(publicMode) return;
+  await refreshAuth();
+  if(createMode) setView(user ? "edit" : "account");
+});
 
 $("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("DShario copied.","ok")}catch{prompt("Copy this DShario:",u)}};
 $("shareBtn").onclick=async()=>{const u=shareUrl(),c=currentCard||{};if(navigator.share){try{await navigator.share({title:(c.full_name||"My")+" DShario",text:[c.full_name,c.job_title,c.company].filter(Boolean).join(" • "),url:u})}catch{}}else $("copyBtn").click()};
@@ -337,6 +343,12 @@ $("pngBtn").onclick=async()=>{
   $("tabs").style.display="grid";
   $("publicHeader").style.display="none";
   $("accountPill").style.display="inline-block";
+
+  if(createMode){
+    setView(user ? "edit" : "account");
+    return;
+  }
+
   setView("account");
 })();
 </script>
