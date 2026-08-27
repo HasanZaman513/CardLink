@@ -23,6 +23,13 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 .publicHeader{display:none;margin:16px 0;color:#64748b;font-size:13px;text-align:center}.footer{text-align:center;color:#64748b;font-size:12px;padding:22px 0 4px}
 @media(max-width:720px){.app{padding:0 12px 26px}.brand{font-size:24px}.brandIcon{width:38px;height:33px}.tabs{margin-top:18px}.tab{font-size:13px;min-height:54px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:16px}.card{padding:21px 18px 25px}.profile{width:86px;height:86px;border-radius:18px}.contacts{margin-top:21px}.contact{font-size:16px}.actionBtn{font-size:14px}.cl{right:18px;bottom:15px}.qr.show{align-items:flex-start}}
 @media(max-width:390px){.actionGrid{grid-template-columns:1fr}.actionBtn.full{grid-column:auto}.qr.show{flex-direction:column}.name{font-size:31px}}
+
+.homeHero{max-width:620px;margin:22px auto 8px;text-align:center;padding:24px 18px}
+.homeHero h1{font-size:34px;line-height:1.1;margin:8px 0 10px}
+.homeHero p{font-size:17px;line-height:1.5;color:#475569;margin:0 auto 22px;max-width:520px}
+.homeActions{display:grid;gap:12px;max-width:390px;margin:0 auto}
+.homeActions button{width:100%;min-height:54px;font-size:17px}
+.homeNote{font-size:13px!important;color:#64748b!important;margin-top:16px!important}
 </style>
 </head>
 <body>
@@ -112,6 +119,18 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 </div>
 </section>
 
+<section id="homeView" class="view">
+<div class="homeHero">
+  <div style="font-size:30px;font-weight:900;margin-bottom:12px">DS</div>
+  <h1>DShario</h1>
+  <p><strong>Keep in touch.</strong><br>Create a free digital contact card and share it by link or QR code.</p>
+  <div class="homeActions">
+    <button class="primary" id="homeCreateBtn">Create my free card</button>
+    <button class="secondary" id="homeSigninBtn">Sign in</button>
+  </div>
+  <p class="homeNote">Free to create. Share your card anywhere.</p>
+</div>
+</section>
 <section id="accountView" class="view">
 <div class="panel authBox">
   <h1>DShario account</h1>
@@ -163,7 +182,7 @@ function contrast(bg){const h=(bg||"#eff6ff").replace("#","");if(h.length!==6)re
 function muted(bg){return contrast(bg)==="#ffffff"?"rgba(255,255,255,.82)":"#5b6b83";}
 function shareUrl(card=currentCard){return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug) : location.origin+location.pathname;}
 function setView(name){
-  ["card","edit","account"].forEach(v=>$(v+"View").classList.toggle("active",v===name));
+  ["home","card","edit","account"].forEach(v=>$(v+"View").classList.toggle("active",v===name));
   $("myTab").classList.toggle("active",name==="card"); $("editTab").classList.toggle("active",name==="edit"); $("accountTab").classList.toggle("active",name==="account");
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -249,6 +268,8 @@ $("editCardBtn").onclick=()=>{if(!user){setView("account");msg("Sign in to edit 
 $("myTab").onclick=()=>setView("card"); $("editTab").onclick=()=>{if(!user){setView("account");msg("Sign in or create an account to save DShario online.","info")}else{setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
 
 function setAuthMode(mode){authMode=mode;$("signInMode").classList.toggle("active",mode==="signin");$("signUpMode").classList.toggle("active",mode==="signup");$("authSubmit").textContent=mode==="signin"?"Sign in":"Create account";$("authPassword").autocomplete=mode==="signin"?"current-password":"new-password"}
+$("homeCreateBtn").onclick=()=>{if(user){setView("edit")}else{setAuthMode("signup");setView("account")}};
+$("homeSigninBtn").onclick=()=>{setAuthMode("signin");setView("account")};
 $("signInMode").onclick=()=>setAuthMode("signin"); $("signUpMode").onclick=()=>setAuthMode("signup");
 $("authSubmit").onclick=async()=>{
   const email=$("authEmail").value.trim(),password=$("authPassword").value;
@@ -345,11 +366,11 @@ $("pngBtn").onclick=async()=>{
   $("accountPill").style.display="inline-block";
 
   if(createMode){
-    setView(user ? "edit" : "account");
+    if(user){setView("edit")}else{setAuthMode("signup");setView("account")}
     return;
   }
 
-  setView("account");
+  setView("home");
 })();
 </script>
 </body>
