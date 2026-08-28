@@ -14,7 +14,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;margin:24px 0 18px;border:1px solid #dbe5f2;border-radius:16px;overflow:hidden;background:#f8fafc}.tab{min-height:58px;border:0;background:transparent;color:#53627a;font-weight:850;font-size:15px}.tab.active{color:#fff;background:linear-gradient(135deg,#14387a,#0f57ca)}
 .notice{display:none;margin:0 0 18px;padding:13px 15px;border-radius:13px;font-weight:800}.notice.show{display:block}.notice.ok{background:#ecfdf5;color:#166534}.notice.err{background:#fef2f2;color:#991b1b}.notice.info{background:#eff6ff;color:#1e40af}
 .view{display:none}.view.active{display:block}.panel{background:#fff;border:1px solid #e1e9f4;border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h1{margin:0 0 8px;font-size:clamp(27px,5vw,40px);letter-spacing:-.04em}.lead{color:var(--muted);line-height:1.55;margin:0 0 19px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800;color:#334155}.field input,.field textarea{width:100%;border:1px solid #cbd8ea;border-radius:12px;padding:13px 14px;color:var(--ink);background:#fbfdff;outline:none}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field textarea:focus{border-color:#4f8df7;box-shadow:0 0 0 3px #dbeafe}.hint{font-size:11px;color:var(--muted);line-height:1.4}.check{display:flex;align-items:center;gap:8px;font-size:12px!important}.check input{width:18px!important;height:18px;padding:0!important;accent-color:var(--blue)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800;color:#334155}.field input,.field textarea,.field select{width:100%;border:1px solid #cbd8ea;border-radius:12px;padding:13px 14px;color:var(--ink);background:#fbfdff;outline:none}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#4f8df7;box-shadow:0 0 0 3px #dbeafe}.hint{font-size:11px;color:var(--muted);line-height:1.4}.check{display:flex;align-items:center;gap:8px;font-size:12px!important}.check input{width:18px!important;height:18px;padding:0!important;accent-color:var(--blue)}
 .photoRow{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:center}.photoPreview{width:82px;height:82px;border-radius:18px;border:1px solid #cbd8ea;background:#f8fafc;display:grid;place-items:center;overflow:hidden;color:#64748b;font-size:11px;font-weight:800}.photoPreview img{width:100%;height:100%;object-fit:cover}.mini{border:1px solid #d7e0ec;border-radius:10px;background:#fff;padding:7px 10px;color:#334155;font-size:12px;font-weight:800}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:850;background:#2563eb;color:#fff}.btn.secondary{background:#eff6ff;color:#1d4ed8;border:1px solid #dbeafe}.btn.ghost{background:#fff;color:#334155;border:1px solid #dbe3ee}.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
 .cardWrap{max-width:860px;margin:0 auto}.card{position:relative;border:1px solid #d6e4f5;border-radius:22px;padding:28px 30px 31px;background:#eff6ff;box-shadow:var(--shadow);overflow:hidden}.profile{display:none;width:104px;height:104px;border-radius:22px;object-fit:cover;border:1px solid rgba(15,23,42,.18);margin-bottom:18px}.name{font-size:clamp(32px,6vw,48px);font-weight:950;letter-spacing:-.05em;line-height:1.05}.role{font-size:clamp(18px,3vw,24px);font-weight:800;color:#475569;margin-top:10px}.company{font-size:clamp(17px,2.5vw,21px);font-weight:850;margin-top:7px}.tagline{font-size:17px;color:#5b6b83;line-height:1.45;margin:16px 0 0;max-width:720px}.contacts{display:grid;gap:11px;margin-top:25px;max-width:680px}.contact{display:flex;align-items:center;gap:13px;color:inherit;text-decoration:none;font-size:17px;min-width:0}.icon{width:43px;height:43px;border:1px solid rgba(37,99,235,.18);border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-size:19px}.ct{overflow-wrap:anywhere}.cl{position:absolute;right:23px;bottom:18px;font-size:22px;font-weight:950}
@@ -39,6 +39,11 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 .modal.show{display:block}.modalBox{max-width:760px;margin:24px auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(15,23,42,.28)}
 .modalBox h1{margin:0 0 6px}.modalBox h2{font-size:18px;margin:22px 0 7px}.modalBox p,.modalBox li{color:#475569;line-height:1.6}.modalClose{float:right;border:1px solid #dbe5f2;background:#fff;border-radius:10px;padding:8px 11px;font-weight:800}
 
+
+.shareViewBox{margin:16px 0 4px;padding:14px;border:1px solid #dbe5f2;border-radius:14px;background:#f8fbff}
+.shareViewBox label{display:block;font-size:12px;font-weight:850;color:#334155;margin-bottom:7px}
+.shareViewBox select{width:100%;border:1px solid #cbd8ea;border-radius:11px;padding:11px 12px;background:#fff;color:#0f172a}
+.viewBadge{display:inline-flex;margin:0 0 12px;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-size:12px;font-weight:850}
 </style>
 </head>
 <body>
@@ -74,11 +79,23 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
       <a id="fbRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">f</span><span class="ct">Facebook</span></a>
       <a id="igRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">◎</span><span class="ct">Instagram</span></a>
     </div>
+    <div id="socialEmpty" class="hint" style="display:none;margin-top:14px;text-align:center">No social links added.</div>
     <div class="cl">DS</div>
   </div>
 
   <div id="savedBanner" class="saved" style="display:none">✓ Saved online — sign in from another device to open My Card</div>
   <p class="shareLead">Keep in touch.</p>
+  <div id="viewBadge" class="viewBadge">Professional view</div>
+  <div id="shareViewBox" class="shareViewBox">
+    <label for="shareView">Choose what you want to share</label>
+    <select id="shareView">
+      <option value="professional">Professional — limited professional details</option>
+      <option value="business">Business — include direct contact details</option>
+      <option value="social">Social — social links only</option>
+      <option value="full">Full — all details on your card</option>
+    </select>
+    <div class="hint" style="margin-top:7px">The generated link and QR code will use this privacy view.</div>
+  </div>
 
   <div class="actionGrid">
     <a id="callBtn" class="actionBtn call" href="#" style="display:none">☎ Call</a>
@@ -102,6 +119,15 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
   <div id="loginNeeded" class="notice info show" style="display:none">Please sign in or create an account before saving a DShario online.</div>
   <div class="grid">
     <div class="field"><label>Personal DShario name *</label><input id="slug" placeholder="e.g. hasan-zaman"><span class="hint">Your permanent link will use this name. Letters, numbers and hyphens only.</span></div>
+    <div class="field"><label>Default Privacy View</label>
+      <select id="privacy_view">
+        <option value="professional">Professional — name, role, company, LinkedIn, website</option>
+        <option value="business">Business — professional + phone, email, WhatsApp</option>
+        <option value="social">Social — name + selected social links</option>
+        <option value="full">Full — all details you choose to add</option>
+      </select>
+      <span class="hint">Choose what this share link should reveal. You can change the view before sharing.</span>
+    </div>
     <div class="field"><label>Full name *</label><input id="full_name" placeholder="Your name"></div>
     <div class="field"><label>Profession / job title</label><input id="job_title" placeholder="e.g. Industrial Pharmacist"></div>
     <div class="field"><label>Company / organisation</label><input id="company" placeholder="Optional"></div>
@@ -307,7 +333,13 @@ function slugify(v){return (v||"").toLowerCase().trim().replace(/[^a-z0-9-]+/g,"
 function safeName(v){return (v||"dshario").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"dshario";}
 function contrast(bg){const h=(bg||"#eff6ff").replace("#","");if(h.length!==6)return "#0f172a";const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return ((r*299+g*587+b*114)/1000)>160?"#0f172a":"#ffffff";}
 function muted(bg){return contrast(bg)==="#ffffff"?"rgba(255,255,255,.82)":"#5b6b83";}
-function shareUrl(card=currentCard){return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug) : location.origin+location.pathname;}
+function activePrivacyView(){
+  if(publicMode) return new URLSearchParams(location.search).get("view") || "professional";
+  return $("shareView")?.value || $("privacy_view")?.value || localStorage.getItem("dshario-privacy-view") || "professional";
+}
+function shareUrl(card=currentCard){
+  return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug)+"&view="+encodeURIComponent(activePrivacyView()) : location.origin+location.pathname;
+}
 function setView(name){
   ["home","card","edit","account"].forEach(v=>$(v+"View").classList.toggle("active",v===name));
   $("myTab").classList.toggle("active",name==="card"); $("editTab").classList.toggle("active",name==="edit"); $("accountTab").classList.toggle("active",name==="account");
@@ -316,15 +348,42 @@ function setView(name){
 function setForm(card={}){
   formIds.forEach(id=>{ if($(id)) $(id).value = card[id] ?? (id==="card_color"?"#eff6ff":""); });
   $("show_phone").checked=card.show_phone!==false; $("show_email").checked=card.show_email!==false;
-  photoData=card.photo_url||""; renderPhotoPreview();
+  $("privacy_view").value=card.privacy_view||"professional"; photoData=card.photo_url||""; renderPhotoPreview();
 }
 function getForm(){
   const o={}; formIds.forEach(id=>o[id]=$(id).value.trim());
-  o.slug=slugify(o.slug); o.show_phone=$("show_phone").checked; o.show_email=$("show_email").checked; o.photo_url=photoData||null; o.is_public=true;
+  o.slug=slugify(o.slug); o.show_phone=$("show_phone").checked; o.show_email=$("show_email").checked; o.photo_url=photoData||null; o.is_public=true; o.privacy_view=$("privacy_view").value||"professional";
   return o;
 }
 function renderPhotoPreview(){
   $("photoPreview").innerHTML=photoData?`<img src="${photoData}" alt="Profile preview">`:"No photo";
+}
+function applyPrivacyView(c){
+  const view=activePrivacyView();
+  const show=(id,on,display="flex")=>{ if($(id)) $(id).style.display=on?display:"none"; };
+
+  // Base professional identity
+  show("pPhoto", !!c.photo_url, "block");
+  $("pRole").style.display = (view==="social") ? "none" : "block";
+  $("pCompany").style.display = (view==="social") ? "none" : "block";
+  $("pTagline").style.display = (view==="social") ? "none" : "block";
+  show("locRow", !!c.location && (view==="business"||view==="full"));
+  show("webRow", !!c.website && (view==="professional"||view==="business"||view==="full"));
+  show("liRow", !!c.linkedin_url && (view!=="social" || !!c.linkedin_url));
+  show("fbRow", !!c.facebook_url && (view==="social"||view==="full"));
+  show("igRow", !!c.instagram_url && (view==="social"||view==="full"));
+  show("socialEmpty", view==="social" && !c.linkedin_url && !c.facebook_url && !c.instagram_url, "block");
+
+  const direct = view==="business"||view==="full";
+  show("phoneRow", !!c.phone && direct && c.show_phone!==false);
+  show("callBtn", !!c.phone && direct && c.show_phone!==false);
+  show("emailRow", !!c.email && direct && c.show_email!==false);
+  show("emailBtn", !!c.email && direct && c.show_email!==false);
+  show("waBtn", !!c.whatsapp && direct);
+
+  const labels={professional:"Professional view",business:"Business view",social:"Social view",full:"Full view"};
+  if($("viewBadge")) $("viewBadge").textContent=labels[view]||labels.professional;
+  if($("shareViewBox")) $("shareViewBox").style.display=publicMode?"none":"block";
 }
 function render(card){
   currentCard=card||null;
@@ -340,7 +399,7 @@ function render(card){
   const links=[["webRow",c.website],["liRow",c.linkedin_url],["fbRow",c.facebook_url],["igRow",c.instagram_url]];
   links.forEach(([id,v])=>{ $(id).href=cleanUrl(v)||"#"; $(id).style.display=v?"flex":"none"; });
   const u=shareUrl(c); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u;
-  $("savedBanner").style.display=(!publicMode && user && c.id)?"block":"none";
+  applyPrivacyView(c); $("savedBanner").style.display=(!publicMode && user && c.id)?"block":"none";
   $("editCardBtn").style.display=publicMode?"none":"flex";
 }
 async function loadOwnerCard(){
@@ -370,7 +429,7 @@ async function refreshAuth(loadCard=false){
 async function saveCloud(){
   if(!user){msg("Please sign in before saving your DShario online.","info");setView("account");return}
   const d=getForm(); if(!d.full_name){msg("Please enter your full name.","err");return} if(!d.slug){msg("Please choose your personal DShario name.","err");return}
-  const payload={...d,user_id:user.id,updated_at:new Date().toISOString()};
+  const {privacy_view,...dbCard}=d; try{localStorage.setItem("dshario-privacy-view",privacy_view)}catch(e){} const payload={...dbCard,user_id:user.id,updated_at:new Date().toISOString()};
   let res;
   if(currentCard?.id) res=await sb.from("cards").update(payload).eq("id",currentCard.id).select().single();
   else res=await sb.from("cards").insert(payload).select().single();
@@ -426,8 +485,30 @@ sb.auth.onAuthStateChange(async(event,s)=>{
   }
 });
 
+
+$("shareView").addEventListener("change",()=>{
+  try{localStorage.setItem("dshario-privacy-view",$("shareView").value)}catch(e){}
+  if(currentCard){ applyPrivacyView(currentCard); const u=shareUrl(currentCard); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u; }
+});
+$("privacy_view").addEventListener("change",()=>{
+  $("shareView").value=$("privacy_view").value;
+  try{localStorage.setItem("dshario-privacy-view",$("privacy_view").value)}catch(e){}
+});
 $("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("DShario copied.","ok")}catch{prompt("Copy this DShario:",u)}};
-$("shareBtn").onclick=async()=>{const u=shareUrl(),c=currentCard||{};if(navigator.share){try{await navigator.share({title:(c.full_name||"My")+" DShario",text:[c.full_name,c.job_title,c.company].filter(Boolean).join(" • "),url:u})}catch{}}else $("copyBtn").click()};
+$("shareBtn").onclick=async()=>{
+  const u=shareUrl();
+  // Share only the exact URL as plain text. This matches the working Copy Link output
+  // and avoids Android/share-target handling issues with separate title/text/url fields.
+  if(navigator.share){
+    try{
+      await navigator.share({text:u});
+    }catch(e){
+      if(e?.name!=="AbortError") $("copyBtn").click();
+    }
+  }else{
+    $("copyBtn").click();
+  }
+};
 $("waBtn").onclick=()=>{const c=currentCard||{},u=shareUrl(),t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my DShario")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
 $("qrBtn").onclick=()=>{$("qrPanel").classList.toggle("show")};
 
