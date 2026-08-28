@@ -43,6 +43,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
 .shareViewBox{margin:16px 0 4px;padding:14px;border:1px solid #dbe5f2;border-radius:14px;background:#f8fbff}
 .shareViewBox label{display:block;font-size:12px;font-weight:850;color:#334155;margin-bottom:7px}
 .shareViewBox select{width:100%;border:1px solid #cbd8ea;border-radius:11px;padding:11px 12px;background:#fff;color:#0f172a}
+.expiryRow{margin-top:12px;padding-top:12px;border-top:1px solid #dbe5f2}.expiryActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.expiryActions button{flex:1;min-width:130px}.shareStatus{margin-top:8px;font-size:12px;font-weight:750;color:#475569}
 .viewBadge{display:inline-flex;margin:0 0 12px;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-size:12px;font-weight:850}
 </style>
 </head>
@@ -95,6 +96,20 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;ma
       <option value="full">Full — all details on your card</option>
     </select>
     <div class="hint" style="margin-top:7px">The generated link and QR code will use this privacy view.</div>
+    <div class="expiryRow">
+      <label for="shareExpiry">How long should this share link work?</label>
+      <select id="shareExpiry">
+        <option value="permanent">Permanent</option>
+        <option value="24h">24 hours</option>
+        <option value="7d">7 days</option>
+        <option value="30d">30 days</option>
+      </select>
+      <div class="expiryActions">
+        <button id="createShareLinkBtn" class="btn" type="button">Create Share Link</button>
+        <button id="revokeShareLinkBtn" class="btn ghost" type="button" style="display:none">Revoke This Link</button>
+      </div>
+      <div id="shareLinkStatus" class="shareStatus">Create a link before copying, sharing or showing its QR code.</div>
+    </div>
   </div>
 
   <div class="actionGrid">
@@ -319,6 +334,7 @@ $("privacyClose").addEventListener("click",closePrivacy);
 $("privacyModal").addEventListener("click",e=>{if(e.target===$("privacyModal"))closePrivacy()});
 
 let session = null, user = null, currentCard = null, photoData = "", authMode = "signin", publicMode = false;
+let currentShareUrl = "", currentShareToken = "", publicShareView = "", publicShareCheckTimer = null;
 const createMode = new URLSearchParams(location.search).get("create") === "1";
 
 const formIds = ["slug","full_name","job_title","company","description","location","website","phone","email","whatsapp","linkedin_url","facebook_url","instagram_url","card_color"];
@@ -334,11 +350,75 @@ function safeName(v){return (v||"dshario").toLowerCase().replace(/[^a-z0-9]+/g,"
 function contrast(bg){const h=(bg||"#eff6ff").replace("#","");if(h.length!==6)return "#0f172a";const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return ((r*299+g*587+b*114)/1000)>160?"#0f172a":"#ffffff";}
 function muted(bg){return contrast(bg)==="#ffffff"?"rgba(255,255,255,.82)":"#5b6b83";}
 function activePrivacyView(){
-  if(publicMode) return new URLSearchParams(location.search).get("view") || "professional";
+  if(publicMode) return publicShareView || new URLSearchParams(location.search).get("view") || "professional";
   return $("shareView")?.value || $("privacy_view")?.value || localStorage.getItem("dshario-privacy-view") || "professional";
 }
 function shareUrl(card=currentCard){
   return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug)+"&view="+encodeURIComponent(activePrivacyView()) : location.origin+location.pathname;
+}
+function activeShareUrl(){ return currentShareUrl || shareUrl(); }
+function invalidateShareLink(){
+  currentShareUrl=""; currentShareToken="";
+  if($("revokeShareLinkBtn")) $("revokeShareLinkBtn").style.display="none";
+  if($("shareLinkStatus")) $("shareLinkStatus").textContent="Create a link before copying, sharing or showing its QR code.";
+}
+function expiryDate(choice){
+  if(choice==="permanent") return null;
+  const ms=choice==="24h"?86400000:choice==="7d"?604800000:2592000000;
+  return new Date(Date.now()+ms).toISOString();
+}
+async function createExpiringShareLink(){
+  if(!user||!currentCard?.slug){msg("Sign in and save your DShario before creating a share link.","info");return null}
+  const token=(crypto.randomUUID?crypto.randomUUID().replace(/-/g,""):(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)));
+  const choice=$("shareExpiry").value;
+  const payload={user_id:user.id,card_slug:currentCard.slug,token,privacy_view:activePrivacyView(),expires_at:expiryDate(choice),revoked:false};
+  const {error}=await sb.from("share_links").insert(payload);
+  if(error){msg("Could not create share link: "+error.message,"err");return null}
+  currentShareToken=token; currentShareUrl=location.origin+location.pathname+"?share="+encodeURIComponent(token);
+  $("revokeShareLinkBtn").style.display="inline-block";
+  const labels={permanent:"Permanent", "24h":"24 hours", "7d":"7 days", "30d":"30 days"};
+  $("shareLinkStatus").textContent="✓ "+labels[choice]+" link ready.";
+  $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(currentShareUrl);
+  $("qrText").textContent=currentShareUrl;
+  msg(labels[choice]+" share link created.","ok");
+  return currentShareUrl;
+}
+function showExpiredShareLink(){
+  if(publicShareCheckTimer){clearInterval(publicShareCheckTimer);publicShareCheckTimer=null}
+  currentCard=null;
+  render(null);
+  setView("card");
+  msg("This DShario share link has expired, was revoked, or is invalid.","err");
+}
+async function recheckSharedLink(token){
+  const {data,error}=await sb.rpc("get_valid_share_link",{link_token:token});
+  const link=Array.isArray(data)?data[0]:data;
+  if(error||!link){showExpiredShareLink();return false}
+  return true;
+}
+function startShareLinkRecheck(token){
+  if(publicShareCheckTimer) clearInterval(publicShareCheckTimer);
+  publicShareCheckTimer=setInterval(async()=>{
+    if(document.visibilityState!=="visible") return;
+    await recheckSharedLink(token);
+  },30000);
+  document.addEventListener("visibilitychange",async()=>{
+    if(document.visibilityState==="visible" && publicMode && publicShareCheckTimer){
+      await recheckSharedLink(token);
+    }
+  },{once:false});
+}
+async function loadSharedCard(token){
+  publicMode=true; $("tabs").style.display="none"; $("publicHeader").style.display="block"; $("accountPill").style.display="none";
+  const {data,error}=await sb.rpc("get_valid_share_link",{link_token:token});
+  const link=Array.isArray(data)?data[0]:data;
+  if(error||!link){showExpiredShareLink();return}
+  publicShareView=link.privacy_view||"professional";
+  const {data:cardData,error:cardError}=await sb.rpc("get_public_card",{card_slug:link.card_slug});
+  const card=Array.isArray(cardData)?cardData[0]:cardData;
+  if(cardError||!card){render(null);setView("card");msg("This DShario is no longer available.","err");return}
+  render(card); setView("card");
+  startShareLinkRecheck(token);
 }
 function setView(name){
   ["home","card","edit","account"].forEach(v=>$(v+"View").classList.toggle("active",v===name));
@@ -398,7 +478,7 @@ function render(card){
   const email=c.email||""; $("pEmail").textContent=email; $("emailRow").href=email?"mailto:"+email:"#"; $("emailRow").style.display=email?"flex":"none"; $("emailBtn").href=$("emailRow").href; $("emailBtn").style.display=email?"flex":"none";
   const links=[["webRow",c.website],["liRow",c.linkedin_url],["fbRow",c.facebook_url],["igRow",c.instagram_url]];
   links.forEach(([id,v])=>{ $(id).href=cleanUrl(v)||"#"; $(id).style.display=v?"flex":"none"; });
-  const u=shareUrl(c); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u;
+  const u=publicMode?location.href:(currentShareUrl||shareUrl(c)); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u;
   applyPrivacyView(c); $("savedBanner").style.display=(!publicMode && user && c.id)?"block":"none";
   $("editCardBtn").style.display=publicMode?"none":"flex";
 }
@@ -488,29 +568,30 @@ sb.auth.onAuthStateChange(async(event,s)=>{
 
 $("shareView").addEventListener("change",()=>{
   try{localStorage.setItem("dshario-privacy-view",$("shareView").value)}catch(e){}
-  if(currentCard){ applyPrivacyView(currentCard); const u=shareUrl(currentCard); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u; }
+  invalidateShareLink();
+  if(currentCard) applyPrivacyView(currentCard);
 });
+$("shareExpiry").addEventListener("change",invalidateShareLink);
 $("privacy_view").addEventListener("change",()=>{
   $("shareView").value=$("privacy_view").value;
   try{localStorage.setItem("dshario-privacy-view",$("privacy_view").value)}catch(e){}
+  invalidateShareLink();
 });
-$("copyBtn").onclick=async()=>{const u=shareUrl();try{await navigator.clipboard.writeText(u);msg("DShario copied.","ok")}catch{prompt("Copy this DShario:",u)}};
-$("shareBtn").onclick=async()=>{
-  const u=shareUrl();
-  // Share only the exact URL as plain text. This matches the working Copy Link output
-  // and avoids Android/share-target handling issues with separate title/text/url fields.
-  if(navigator.share){
-    try{
-      await navigator.share({text:u});
-    }catch(e){
-      if(e?.name!=="AbortError") $("copyBtn").click();
-    }
-  }else{
-    $("copyBtn").click();
-  }
+$("createShareLinkBtn").onclick=createExpiringShareLink;
+$("revokeShareLinkBtn").onclick=async()=>{
+  if(!currentShareToken||!user)return;
+  const {error}=await sb.from("share_links").update({revoked:true}).eq("token",currentShareToken).eq("user_id",user.id);
+  if(error){msg("Could not revoke link: "+error.message,"err");return}
+  currentShareUrl=""; currentShareToken=""; $("revokeShareLinkBtn").style.display="none"; $("shareLinkStatus").textContent="✓ Link revoked. Create a new link when you want to share again."; msg("Share link revoked.","ok");
 };
-$("waBtn").onclick=()=>{const c=currentCard||{},u=shareUrl(),t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my DShario")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
-$("qrBtn").onclick=()=>{$("qrPanel").classList.toggle("show")};
+async function ensureShareUrl(){ return currentShareUrl || await createExpiringShareLink(); }
+$("copyBtn").onclick=async()=>{const u=await ensureShareUrl();if(!u)return;try{await navigator.clipboard.writeText(u);msg("DShario link copied.","ok")}catch{prompt("Copy this DShario:",u)}};
+$("shareBtn").onclick=async()=>{
+  const u=await ensureShareUrl(); if(!u)return;
+  if(navigator.share){try{await navigator.share({text:u})}catch(e){if(e?.name!=="AbortError"){try{await navigator.clipboard.writeText(u);msg("Link copied instead.","ok")}catch{}}}}else{try{await navigator.clipboard.writeText(u);msg("DShario link copied.","ok")}catch{prompt("Copy this DShario:",u)}}
+};
+$("waBtn").onclick=async()=>{const u=await ensureShareUrl();if(!u)return;const c=currentCard||{},t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my DShario")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
+$("qrBtn").onclick=async()=>{if(!publicMode){const u=await ensureShareUrl();if(!u)return;$("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u);$("qrText").textContent=u}$("qrPanel").classList.toggle("show")};
 
 function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 $("vcfBtn").onclick=()=>{const d=currentCard||{};if(!d.full_name)return;const esc=s=>(s||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;");const parts=d.full_name.split(/\s+/),last=parts.pop()||"",first=parts.join(" ");let v=["BEGIN:VCARD","VERSION:3.0","N:"+esc(last)+";"+esc(first)+";;;","FN:"+esc(d.full_name)];if(d.company)v.push("ORG:"+esc(d.company));if(d.job_title)v.push("TITLE:"+esc(d.job_title));if(d.location)v.push("ADR:;;;;"+esc(d.location)+";;;");if(d.phone)v.push("TEL;TYPE=CELL:"+esc(d.phone));if(d.email)v.push("EMAIL;TYPE=INTERNET:"+esc(d.email));if(d.website)v.push("URL:"+cleanUrl(d.website));v.push("END:VCARD");downloadBlob(new Blob([v.join("\r\n")],{type:"text/vcard"}),safeName(d.full_name)+".vcf")};
@@ -567,15 +648,21 @@ $("pngBtn").onclick=async()=>{
 };
 
 (async function init(){
-  const params=new URLSearchParams(location.search),slug=params.get("card");
+  const params=new URLSearchParams(location.search),shareToken=params.get("share"),slug=params.get("card");
+
+  // A secure share URL deliberately opens only the card/view represented by its token.
+  if(shareToken){
+    await loadSharedCard(shareToken);
+    return;
+  }
 
   if(slug){
     await loadPublicCard(slug);
     return;
   }
 
-  // The main DShario URL must always stay a neutral public landing page.
-  // Do not preload/render the signed-in owner's personal card here.
+  // Production rule: the plain DShario URL is always a neutral landing page.
+  // Never preload any saved card here. My Card is loaded only after an authenticated user taps My Card.
   await refreshAuth(false);
   currentCard=null;
   render(null);
