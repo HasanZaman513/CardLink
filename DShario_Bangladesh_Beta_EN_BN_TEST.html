@@ -1,0 +1,940 @@
+<!doctype html>
+<!-- DShario Contact Exchange V2 — Bangladesh-first test build. Live index.html is unchanged. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DShario — Keep in touch.</title>
+<meta name="theme-color" content="#ffffff">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#123a78;--blue:#3478ee;--ink:#0f172a;--muted:#64748b;--line:#dbe5f2;--soft:#f8fbff;--green:#16a34a;--shadow:0 12px 32px rgba(15,23,42,.10)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,"Noto Sans Bengali","Nirmala UI","Vrinda",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#fff}
+button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:980px;margin:0 auto;padding:0 16px 34px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:18px 2px;border-bottom:1px solid #e8eef7}.brand{display:flex;align-items:center;gap:10px;color:#174ea6;font-weight:950;font-size:28px;letter-spacing:-.04em}.brandIcon{width:42px;height:36px;border:3px solid currentColor;border-radius:7px;display:grid;place-items:center;font-size:14px}.accountPill{border:1px solid #dbe5f2;background:#fff;border-radius:999px;padding:9px 13px;color:#334155;font-size:13px;font-weight:800}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;margin:24px 0 18px;border:1px solid #dbe5f2;border-radius:16px;overflow:hidden;background:#f8fafc}.tab{min-height:58px;border:0;background:transparent;color:#53627a;font-weight:850;font-size:15px}.tab.active{color:#fff;background:linear-gradient(135deg,#14387a,#0f57ca)}
+.notice{display:none;margin:0 0 18px;padding:13px 15px;border-radius:13px;font-weight:800}.notice.show{display:block}.notice.ok{background:#ecfdf5;color:#166534}.notice.err{background:#fef2f2;color:#991b1b}.notice.info{background:#eff6ff;color:#1e40af}
+.view{display:none}.view.active{display:block}.panel{background:#fff;border:1px solid #e1e9f4;border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h1{margin:0 0 8px;font-size:clamp(27px,5vw,40px);letter-spacing:-.04em}.lead{color:var(--muted);line-height:1.55;margin:0 0 19px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800;color:#334155}.field input,.field textarea,.field select{width:100%;border:1px solid #cbd8ea;border-radius:12px;padding:13px 14px;color:var(--ink);background:#fbfdff;outline:none}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#4f8df7;box-shadow:0 0 0 3px #dbeafe}.hint{font-size:11px;color:var(--muted);line-height:1.4}.check{display:flex;align-items:center;gap:8px;font-size:12px!important}.check input{width:18px!important;height:18px;padding:0!important;accent-color:var(--blue)}
+.photoRow{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:center}.photoPreview{width:82px;height:82px;border-radius:18px;border:1px solid #cbd8ea;background:#f8fafc;display:grid;place-items:center;overflow:hidden;color:#64748b;font-size:11px;font-weight:800}.photoPreview img{width:100%;height:100%;object-fit:cover}.mini{border:1px solid #d7e0ec;border-radius:10px;background:#fff;padding:7px 10px;color:#334155;font-size:12px;font-weight:800}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:850;background:#2563eb;color:#fff}.btn.secondary{background:#eff6ff;color:#1d4ed8;border:1px solid #dbeafe}.btn.ghost{background:#fff;color:#334155;border:1px solid #dbe3ee}.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
+.cardWrap{max-width:860px;margin:0 auto}.card{position:relative;border:1px solid #d6e4f5;border-radius:22px;padding:28px 30px 31px;background:#eff6ff;box-shadow:var(--shadow);overflow:hidden}.profile{display:none;width:104px;height:104px;border-radius:22px;object-fit:cover;border:1px solid rgba(15,23,42,.18);margin-bottom:18px}.name{font-size:clamp(32px,6vw,48px);font-weight:950;letter-spacing:-.05em;line-height:1.05}.role{font-size:clamp(18px,3vw,24px);font-weight:800;color:#475569;margin-top:10px}.company{font-size:clamp(17px,2.5vw,21px);font-weight:850;margin-top:7px}.tagline{font-size:17px;color:#5b6b83;line-height:1.45;margin:16px 0 0;max-width:720px}.contacts{display:grid;gap:11px;margin-top:25px;max-width:680px}.contact{display:flex;align-items:center;gap:13px;color:inherit;text-decoration:none;font-size:17px;min-width:0}.icon{width:43px;height:43px;border:1px solid rgba(37,99,235,.18);border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-size:19px}.ct{overflow-wrap:anywhere}.cl{position:absolute;right:23px;bottom:18px;font-size:22px;font-weight:950}
+.saved{margin:16px 0 14px;padding:13px;border-radius:14px;background:#ecfdf5;color:#166534;font-weight:800;text-align:center}.shareLead{margin:18px 2px 13px;color:#64748b}.actionGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.actionBtn{min-height:55px;border-radius:13px;border:1px solid #d9e2ee;background:#fff;color:#123a78;font-weight:850;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.actionBtn.call{background:#173d7d;color:#fff;border-color:#173d7d}.actionBtn.email{background:#3478ee;color:#fff;border-color:#3478ee}.actionBtn.wa{background:#18b868;color:#fff;border-color:#18b868}.actionBtn.share{background:linear-gradient(135deg,#7134d4,#8a35dc);color:#fff;border:0}.actionBtn.full{grid-column:1/-1}.qr{display:none;margin-top:13px;border:1px solid #dbe5f2;border-radius:14px;padding:15px;background:#f8fbff}.qr.show{display:flex;gap:15px;align-items:center}.qr img{width:120px;height:120px;border:7px solid #fff;border-radius:10px}.qrText{font-size:12px;color:#5b6b83;word-break:break-all}
+.authBox{max-width:560px;margin:0 auto}.switches{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}.switchBtn{border:1px solid #dbe5f2;background:#fff;color:#475569;border-radius:11px;padding:11px;font-weight:850}.switchBtn.active{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}.authStatus{font-size:13px;color:#64748b;margin-top:13px;line-height:1.5}
+.publicHeader{display:none;margin:16px 0;color:#64748b;font-size:13px;text-align:center}.footer{text-align:center;color:#64748b;font-size:12px;padding:22px 0 4px}
+@media(max-width:720px){.app{padding:0 12px 26px}.brand{font-size:24px}.brandIcon{width:38px;height:33px}.tabs{margin-top:18px}.tab{font-size:13px;min-height:54px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:16px}.card{padding:21px 18px 25px}.profile{width:86px;height:86px;border-radius:18px}.contacts{margin-top:21px}.contact{font-size:16px}.actionBtn{font-size:14px}.cl{right:18px;bottom:15px}.qr.show{align-items:flex-start}}
+@media(max-width:390px){.actionGrid{grid-template-columns:1fr}.actionBtn.full{grid-column:auto}.qr.show{flex-direction:column}.name{font-size:31px}}
+
+.homeHero{max-width:620px;margin:22px auto 8px;text-align:center;padding:24px 18px}
+.homeHero h1{font-size:34px;line-height:1.1;margin:8px 0 10px}
+.homeHero p{font-size:17px;line-height:1.5;color:#475569;margin:0 auto 22px;max-width:520px}
+.homeActions{display:grid;gap:12px;max-width:390px;margin:0 auto}
+.homeActions button{width:100%;min-height:54px;font-size:17px}
+.homeNote{font-size:13px!important;color:#64748b!important;margin-top:16px!important}
+
+.privacyLinks{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+.privacyLinks button{border:0;background:transparent;color:#1d4ed8;text-decoration:underline;padding:4px;font-size:12px}
+.privacyNotice{grid-column:1/-1;background:#f8fbff;border:1px solid #dbe5f2;border-radius:12px;padding:12px 13px;font-size:12px;line-height:1.5;color:#475569}
+.privacyNotice button{border:0;background:transparent;color:#1d4ed8;text-decoration:underline;padding:0;font-weight:800}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:9999;padding:18px;overflow:auto}
+.modal.show{display:block}.modalBox{max-width:760px;margin:24px auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(15,23,42,.28)}
+.modalBox h1{margin:0 0 6px}.modalBox h2{font-size:18px;margin:22px 0 7px}.modalBox p,.modalBox li{color:#475569;line-height:1.6}.modalClose{float:right;border:1px solid #dbe5f2;background:#fff;border-radius:10px;padding:8px 11px;font-weight:800}
+
+
+.shareViewBox{margin:16px 0 4px;padding:14px;border:1px solid #dbe5f2;border-radius:14px;background:#f8fbff}
+.shareViewBox label{display:block;font-size:12px;font-weight:850;color:#334155;margin-bottom:7px}
+.shareViewBox select{width:100%;border:1px solid #cbd8ea;border-radius:11px;padding:11px 12px;background:#fff;color:#0f172a}
+.expiryRow{margin-top:12px;padding-top:12px;border-top:1px solid #dbe5f2}.expiryActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.expiryActions button{flex:1;min-width:130px}.shareStatus{margin-top:8px;font-size:12px;font-weight:750;color:#475569}
+.viewBadge{display:inline-flex;margin:0 0 12px;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-size:12px;font-weight:850}
+
+.exchangeBox{margin-top:16px;padding:16px;border:1px solid #dbe5f2;border-radius:16px;background:#f8fbff}.exchangeBox h3{margin:0 0 7px}.exchangeBox p{margin:0 0 12px;color:#64748b;line-height:1.45}.exchangeChoices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.exchangeForm{display:none;margin-top:13px}.exchangeForm.show{display:block}.exchangeConsent{display:flex;align-items:flex-start;gap:9px;margin-top:12px;font-size:12px;color:#475569;line-height:1.45}.exchangeConsent input{width:18px;height:18px;flex:0 0 auto}.receivedList{display:grid;gap:9px;margin-top:12px}.receivedCount{font-size:12px;color:#64748b;margin-top:9px}.receivedItem{border:1px solid #dbe5f2;border-radius:14px;background:#fff;overflow:hidden}.receivedSummary{padding:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px}.receivedSummary strong{display:block;font-size:15px}.receivedMeta{font-size:12px;color:#64748b;line-height:1.45;margin-top:3px}.receivedDetails{display:none;border-top:1px solid #e8eef6;padding:13px;background:#fbfdff}.receivedItem.open .receivedDetails{display:block}.detailRow{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:4px 0;font-size:13px}.detailLabel{font-weight:800;color:#475569}.receivedActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.guestUpsell{display:none;margin-top:12px;padding:13px;border-radius:13px;background:#ecfdf5;color:#166534}.guestUpsell.show{display:block}.memberHint{font-size:12px;color:#64748b;margin-top:7px}@media(max-width:520px){.exchangeChoices{grid-template-columns:1fr}.detailRow{grid-template-columns:78px 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="brand"><span class="brandIcon">DS</span><span>DShario</span></div>
+  <div style="display:flex;align-items:center;gap:8px"><button id="langToggle" class="accountPill" type="button" aria-label="Change language">বাংলা</button><button id="accountPill" class="accountPill">Sign in</button></div>
+</header>
+
+<div id="tabs" class="tabs">
+  <button class="tab active" id="myTab">▣ My Card</button>
+  <button class="tab" id="editTab">✎ Edit / Create</button>
+  <button class="tab" id="accountTab">◉ Account</button>
+</div>
+
+<div id="notice" class="notice"></div>
+<div id="publicHeader" class="publicHeader">Public DShario • No account required to view</div>
+
+<section id="cardView" class="view active">
+<div class="cardWrap">
+  <div id="card" class="card">
+    <img id="pPhoto" class="profile" alt="Profile image">
+    <div id="pName" class="name">Your name</div>
+    <div id="pRole" class="role">Professional title</div>
+    <div id="pCompany" class="company">Company / organisation</div>
+    <p id="pTagline" class="tagline">Your short introduction will appear here.</p>
+    <div class="contacts">
+      <div id="locRow" class="contact"><span class="icon">⌖</span><span id="pLocation" class="ct">Location</span></div>
+      <a id="phoneRow" class="contact" href="#" style="display:none"><span class="icon">☎</span><span id="pPhone" class="ct"></span></a>
+      <a id="emailRow" class="contact" href="#" style="display:none"><span class="icon">✉</span><span id="pEmail" class="ct"></span></a>
+      <a id="webRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">↗</span><span class="ct">Website</span></a>
+      <a id="liRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">in</span><span class="ct">LinkedIn</span></a>
+      <a id="fbRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">f</span><span class="ct">Facebook</span></a>
+      <a id="igRow" class="contact" href="#" target="_blank" rel="noopener" style="display:none"><span class="icon">◎</span><span class="ct">Instagram</span></a>
+    </div>
+    <div id="socialEmpty" class="hint" style="display:none;margin-top:14px;text-align:center">No social links added.</div>
+    <div class="cl">DS</div>
+  </div>
+
+  <div id="savedBanner" class="saved" style="display:none">✓ Saved online — sign in from another device to open My Card</div>
+  <p class="shareLead">Keep in touch.</p>
+  <div id="viewBadge" class="viewBadge">Professional view</div>
+  <div id="shareViewBox" class="shareViewBox">
+    <label for="shareView">Choose what you want to share</label>
+    <select id="shareView">
+      <option value="professional">Professional — limited professional details</option>
+      <option value="business">Business — include direct contact details</option>
+      <option value="social">Social — social links only</option>
+      <option value="full">Full — all details on your card</option>
+    </select>
+    <div class="hint" style="margin-top:7px">The generated link and QR code will use this privacy view.</div>
+    <div class="expiryRow">
+      <label for="shareExpiry">How long should this share link work?</label>
+      <select id="shareExpiry">
+        <option value="permanent">Permanent</option>
+        <option value="24h">24 hours</option>
+        <option value="7d">7 days</option>
+        <option value="30d">30 days</option>
+      </select>
+      <div class="expiryActions">
+        <button id="createShareLinkBtn" class="btn" type="button">Create Share Link</button>
+        <button id="revokeShareLinkBtn" class="btn ghost" type="button" style="display:none">Revoke This Link</button>
+      </div>
+      <div id="shareLinkStatus" class="shareStatus">Create a link before copying, sharing or showing its QR code.</div>
+    </div>
+  </div>
+
+  <div class="actionGrid">
+    <a id="callBtn" class="actionBtn call" href="#" style="display:none">☎ Call</a>
+    <a id="emailBtn" class="actionBtn email" href="#" style="display:none">✉ Email</a>
+    <button id="waBtn" class="actionBtn wa">◉ Share on WhatsApp</button>
+    <button id="shareBtn" class="actionBtn share">⌯ Share DShario</button>
+    <button id="copyBtn" class="actionBtn">🔗 Copy Link</button>
+    <button id="qrBtn" class="actionBtn">▦ QR Code</button>
+    <button id="vcfBtn" class="actionBtn">＋ Save to Contacts</button>
+    <button id="pngBtn" class="actionBtn full">⇩ Download as Image</button>
+  </div>
+
+  <div id="exchangeBox" class="exchangeBox" style="display:none">
+    <h3>Exchange contact</h3>
+    <p>Send your contact back in seconds — no DShario account required.</p>
+    <div class="exchangeChoices">
+      <button id="guestExchangeBtn" class="btn" type="button">Send my contact back</button>
+      <button id="memberExchangeBtn" class="btn ghost" type="button">Exchange with my DShario</button>
+    </div>
+    <div class="memberHint">Already use DShario? Sign in and send your saved details with less typing.</div>
+    <div id="exchangeForm" class="exchangeForm">
+      <div class="grid">
+        <div class="field"><label>Name *</label><input id="exName" autocomplete="name"></div>
+        <div class="field"><label>Phone</label><input id="exPhone" autocomplete="tel"></div>
+        <div class="field"><label>Email</label><input id="exEmail" type="email" autocomplete="email"></div>
+        <div class="field"><label>Company</label><input id="exCompany"></div>
+        <div class="field"><label>Job title</label><input id="exTitle"></div>
+      </div>
+      <label class="exchangeConsent"><input id="exConsent" type="checkbox"><span>I agree to share these selected contact details with this DShario card owner. The owner may save these details to their phone. DShario will keep the exchange in the owner’s temporary contact inbox until it is deleted, subject to the Privacy Policy.</span></label>
+      <div class="actions"><button id="sendExchangeBtn" class="btn" type="button">Send my contact</button></div>
+      <div id="guestUpsell" class="guestUpsell">✓ Contact sent. Want your own digital card? Create your free DShario — designed for easy mobile sharing.</div>
+    </div>
+  </div>
+  <div id="qrPanel" class="qr"><img id="qrImg" alt="QR code"><div><strong>Scan to open this DShario</strong><div id="qrText" class="qrText"></div></div></div>
+</div>
+</section>
+
+<section id="editView" class="view">
+<div class="panel">
+  <h1>Create or edit your DShario</h1>
+  <p class="lead">Your DShario is saved online to your account. Edit it only when your details change.</p>
+  <div id="loginNeeded" class="notice info show" style="display:none">Please sign in or create an account before saving a DShario online.</div>
+  <div class="grid">
+    <div class="field"><label>Personal DShario name *</label><input id="slug" placeholder="e.g. hasan-zaman"><span class="hint">Your permanent link will use this name. Letters, numbers and hyphens only.</span></div>
+    <div class="field"><label>Default Privacy View</label>
+      <select id="privacy_view">
+        <option value="professional">Professional — name, role, company, LinkedIn, website</option>
+        <option value="business">Business — professional + phone, email, WhatsApp</option>
+        <option value="social">Social — name + selected social links</option>
+        <option value="full">Full — all details you choose to add</option>
+      </select>
+      <span class="hint">Choose what this share link should reveal. You can change the view before sharing.</span>
+    </div>
+    <div class="field"><label>Full name *</label><input id="full_name" placeholder="Your name"></div>
+    <div class="field"><label>Profession / job title</label><input id="job_title" placeholder="e.g. Industrial Pharmacist"></div>
+    <div class="field"><label>Company / organisation</label><input id="company" placeholder="Optional"></div>
+    <div class="field full"><label>Short introduction</label><textarea id="description" placeholder="A short professional introduction"></textarea></div>
+    <div class="field"><label>Location</label><input id="location" placeholder="City, country"></div>
+    <div class="field"><label>Website</label><input id="website" placeholder="https://..."></div>
+    <div class="field"><label>Mobile number</label><input id="phone" placeholder="+61..."><label class="check"><input id="show_phone" type="checkbox" checked> Show on public DShario</label></div>
+    <div class="field"><label>Email address</label><input id="email" type="email" placeholder="you@example.com"><label class="check"><input id="show_email" type="checkbox" checked> Show on public DShario</label></div>
+    <div class="field"><label>WhatsApp number</label><input id="whatsapp" placeholder="+61..."></div>
+    <div class="field"><label>LinkedIn (optional)</label><input id="linkedin_url" placeholder="https://linkedin.com/in/..."></div>
+    <div class="field"><label>Facebook (optional)</label><input id="facebook_url" placeholder="https://facebook.com/..."></div>
+    <div class="field"><label>Instagram (optional)</label><input id="instagram_url" placeholder="https://instagram.com/..."></div>
+    <div class="field"><label>Card background colour</label><input id="card_color" type="color" value="#eff6ff"></div>
+    <div class="field full">
+      <label>Profile image (optional)</label>
+      <div class="photoRow"><div id="photoPreview" class="photoPreview">No photo</div><div><input id="photo" type="file" accept="image/*"><div style="margin-top:8px"><button id="removePhoto" class="mini" type="button">Remove photo</button></div><div class="hint">Compressed before cloud saving for this MVP.</div></div></div>
+    </div>
+  </div>
+  <div class="privacyNotice">
+    <strong>Privacy notice:</strong> DShario uses the information you enter to create, save and display your digital card. Your card is designed to be public and may be viewed by anyone who has its link. Only add contact details you are comfortable making public. Your account and card data are processed using Supabase. You can edit your card or delete it from your account.
+    <button type="button" class="openPrivacy">Read Privacy Policy</button> • <button type="button" class="openTerms">Terms of Use</button>
+  </div>
+  <div class="actions">
+    <button id="saveCloudBtn" class="btn">Save My DShario Online</button>
+    <button id="previewBtn" class="btn secondary">Preview</button>
+    <button id="deleteBtn" class="btn danger" style="display:none">Delete Card</button>
+  </div>
+</div>
+</section>
+
+<section id="homeView" class="view">
+<div class="homeHero">
+  <div style="font-size:30px;font-weight:900;margin-bottom:12px">DS</div>
+  <h1>DShario</h1>
+  <p><strong>Keep in touch.</strong><br>Create a free digital contact card and share it by link or QR code.</p>
+  <div class="homeActions">
+    <button class="primary" id="homeCreateBtn">Create my free card</button>
+    <button class="secondary" id="homeSigninBtn">Sign in</button>
+  </div>
+  <p class="homeNote">Free to create. Share your card anywhere.</p>
+</div>
+</section>
+<section id="accountView" class="view">
+<div class="panel authBox">
+  <h1>DShario account</h1>
+  <p class="lead">Sign in to save your DShario online and access it from another device.</p>
+  <div id="signedOutBox">
+    <div class="switches"><button id="signInMode" class="switchBtn active">Sign in</button><button id="signUpMode" class="switchBtn">Create account</button></div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+    <div class="field" style="margin-top:12px"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
+    <div class="privacyNotice" style="margin-top:12px">By creating an account, you acknowledge the <button type="button" class="openPrivacy">DShario Privacy Policy</button> and agree to the <button type="button" class="openTerms">Terms of Use</button>. Your account email is used for authentication and account access.</div>
+    <div class="actions"><button id="authSubmit" class="btn">Sign in</button></div>
+    <div id="authStatus" class="authStatus">New users must confirm their email before first sign-in.</div>
+  </div>
+  <div id="signedInBox" style="display:none">
+    <div class="saved">✓ Signed in as <span id="userEmail"></span></div>
+    <p class="lead">Your DShario is saved online. Tap My Card above to open it, or Edit / Create to update it.</p>
+    <button id="signOutBtn" class="btn ghost">Sign out</button>
+    <div id="receivedContactsPanel" style="display:none;margin-top:20px">
+      <h2 style="font-size:20px">Received Contacts</h2>
+      <div class="hint">Temporary inbox — save important contacts to your phone, then delete them from DShario.</div>
+      <p class="lead">Temporary contact inbox. Save useful contacts to your phone, then delete them from DShario to make room for new contacts.</p>
+      <button id="refreshContactsBtn" class="btn secondary" type="button">Refresh contacts</button>
+      <div id="receivedContactsCount" class="receivedCount">0 / 10 contacts</div>
+      <div id="receivedContactsList" class="receivedList"></div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<div class="footer">DShario • Keep in touch.<div class="privacyLinks"><button type="button" class="openPrivacy">Privacy Policy</button><button type="button" class="openTerms">Terms of Use</button></div></div>
+</div>
+
+
+<div id="termsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+  <div class="modalBox">
+    <button id="termsClose" class="modalClose" type="button">Close</button>
+    <h1 id="termsTitle">DShario Terms of Use</h1>
+    <p><strong>Last updated: 28 August 2026</strong></p>
+
+    <p>These Terms of Use apply when you access or use the DShario website and prototype service. By creating an account or using DShario, you agree to these Terms. If you do not agree, please do not create an account or use the service.</p>
+
+    <h2>1. About DShario</h2>
+    <p>DShario is currently an early-stage prototype that lets users create and share digital business/contact cards. Features may change as the service is tested and developed.</p>
+
+    <h2>2. Eligibility and accounts</h2>
+    <p>You must provide accurate account information and keep your sign-in credentials secure. You are responsible for activity carried out through your account. DShario is intended for professional networking and is not designed for use by children.</p>
+
+    <h2>3. Information you publish</h2>
+    <p>You control the information you add to your DShario card. Cards are designed to be shared publicly, so information placed on a public card may be viewed, copied, saved or shared by other people. Do not publish information you want to keep private.</p>
+
+    <h2>4. Your responsibility for content</h2>
+    <p>You must only upload or publish information, photographs, logos, links and other material that you own or have permission to use. You must not impersonate another person, misrepresent your identity or affiliation, or publish another person's personal information without appropriate permission.</p>
+
+    <h2>5. Acceptable use</h2>
+    <p>You must not use DShario for unlawful, fraudulent, deceptive, abusive, harassing or harmful purposes; distribute malware or malicious links; interfere with the service or another user's account; attempt unauthorised access; or use the service in a way that infringes another person's rights.</p>
+
+    <h2>6. Prototype availability</h2>
+    <p>DShario is provided as a developing prototype. We may fix, change, add or remove prototype features as development continues. We do not promise uninterrupted or error-free availability. Where reasonably practicable, material changes affecting users will be communicated transparently.</p>
+
+    <h2>7. Third-party services and links</h2>
+    <p>DShario currently relies on third-party technology and hosting services, including Supabase and website-hosting infrastructure, and may link to external services such as social networks. Those third parties operate under their own terms and privacy practices. DShario does not control third-party websites or services.</p>
+
+    <h2>8. Intellectual property</h2>
+    <p>DShario's name, branding, interface and original service materials remain the property of their respective owner(s). You retain ownership of content you provide. You give DShario permission to process, store and display that content only as reasonably necessary to operate your account, create your card and provide the features you request.</p>
+
+    <h2>9. Removing your card and account-related information</h2>
+    <p>You can edit your card and the current prototype provides a Delete Card function. If you need help with account-related information, contact DShario through its official LinkedIn Page until a dedicated support address is established.</p>
+
+    <h2>10. No prohibited exclusion of legal rights</h2>
+    <p>Nothing in these Terms excludes, restricts or modifies any right, guarantee, remedy or protection that cannot lawfully be excluded under the Australian Consumer Law or other applicable law.</p>
+
+    <h2>11. Responsibility and liability</h2>
+    <p>To the extent permitted by law, DShario is not responsible for loss caused solely by information a user chooses to publish publicly, misuse of a shared public-card link by another person, or the independent operation of third-party services. This clause does not exclude or limit liability where doing so would be unlawful.</p>
+
+    <h2>12. Suspension or misuse</h2>
+    <p>Access may be restricted where reasonably necessary to protect users or the service, investigate suspected misuse, comply with law, or respond to a serious breach of these Terms. We will not use this clause to remove rights that cannot lawfully be excluded.</p>
+
+    <h2>13. Changes to these Terms</h2>
+    <p>These Terms may be updated as DShario develops. Material changes will be reflected by updating the date and publishing the revised Terms. If a change materially affects existing users, reasonable notice should be provided where practicable.</p>
+
+    <h2>14. Governing law</h2>
+    <p>These Terms are governed by the laws applicable in South Australia, Australia, subject to any rights you have under laws that cannot lawfully be excluded.</p>
+
+    <h2>15. Contact</h2>
+    <p>For questions about these Terms, contact DShario through the official DShario LinkedIn Page. A dedicated support/contact address should be added before a full commercial launch.</p>
+
+    <p><strong>Prototype notice:</strong> DShario is currently being tested and developed and is not presented as a finished commercial service.</p>
+  </div>
+</div>
+
+<div id="privacyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+  <div class="modalBox">
+    <button id="privacyClose" class="modalClose" type="button">Close</button>
+    <h1 id="privacyTitle">DShario Privacy Policy</h1>
+    <p><strong>Last updated: 28 August 2026</strong></p>
+    <p>DShario is currently a prototype digital business card service. This policy explains how personal information is handled when you create an account, create a card, or use DShario.</p>
+
+    <h2>1. Information we collect</h2>
+    <p>Depending on what you choose to provide, DShario may collect your account email address and information for your digital card, including your name, job title, organisation, introduction, location, website, phone number, email address, WhatsApp number, social-media links, profile image, chosen card name and card appearance.</p>
+
+    <h2>2. How we collect and use information</h2>
+    <p>We collect information directly from you when you create an account or enter information into DShario. We use it to authenticate your account, create and store your card, display the information you choose to publish, provide sharing and download features, and operate and improve the prototype.</p>
+
+    <h2>3. Public cards and your choices</h2>
+    <p>DShario cards are designed for sharing. Information included on a public card may be viewed, copied, saved or shared by anyone who receives or discovers the card link. Do not add information you do not want to make public. You are responsible for ensuring that you have permission to publish information about another person.</p>
+
+    <h2>4. Service providers and storage</h2>
+    <p>DShario currently uses Supabase for account authentication and cloud storage/database services. The website is currently delivered using GitHub Pages. A third-party QR-code service may receive the public card URL when a QR code is generated. These providers may process technical information as part of providing their services.</p>
+
+    <h2>5. Overseas processing</h2>
+    <p>Some service providers used by DShario may process or store information outside Australia. Because this prototype may change its hosting configuration, DShario does not currently promise a particular overseas storage country. This policy will be updated when the production hosting and data locations are finalised.</p>
+
+    <h2>6. Security</h2>
+    <p>We take reasonable steps appropriate to this prototype to protect account and card information. However, no internet service can guarantee absolute security. Please use a strong, unique password and avoid placing sensitive information on a public card.</p>
+
+    <h2>7. Access, correction and deletion</h2>
+    <p>You can sign in to review or update your DShario card. The current prototype also provides a Delete Card function. If you need help accessing, correcting or deleting information associated with your account, use the contact method published on the DShario LinkedIn Page until a dedicated privacy contact address is established.</p>
+
+    <h2>8. Retention</h2>
+    <p>Card information is kept while it is needed to provide your DShario account and card, unless you delete your card or the information must be retained for legitimate operational or legal reasons. As the prototype develops, retention practices may be refined and this policy updated.</p>
+
+    <h2>9. Children and sensitive information</h2>
+    <p>DShario is intended for professional networking and is not designed for children. Please do not submit sensitive information such as health information, government identifiers, financial information or passwords as card content.</p>
+
+    <h2>10. Privacy questions and complaints</h2>
+    <p>If you have a privacy question or complaint, contact DShario through its official LinkedIn Page. We will review the issue and respond within a reasonable time. A dedicated privacy email should be added before DShario moves beyond prototype testing.</p>
+
+    <h2>11. Changes to this policy</h2>
+    <p>DShario may update this policy as the prototype, service providers and information-handling practices change. The current version and update date will be published here.</p>
+
+    <p><strong>Important:</strong> This policy describes the current DShario prototype. It should be reviewed again before commercial launch or material changes to data collection, analytics, advertising, payments or third-party integrations.</p>
+  </div>
+</div>
+
+<script>
+try {
+  if (!localStorage.getItem('dshario-profile') && localStorage.getItem('cardlink-profile')) {
+    localStorage.setItem('dshario-profile', localStorage.getItem('cardlink-profile'));
+  }
+} catch (e) {}
+
+const SUPABASE_URL = "https://ajvpiiqcvjngiovdzlun.supabase.co";
+const SUPABASE_KEY = "sb_publishable__w8lTUIFplSuEz5E1zJ3tw_rCps9SkA";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+function openTerms(){ $("termsModal").classList.add("show"); document.body.style.overflow="hidden"; }
+function closeTerms(){ $("termsModal").classList.remove("show"); document.body.style.overflow=""; }
+document.querySelectorAll(".openTerms").forEach(b=>b.addEventListener("click",openTerms));
+$("termsClose").addEventListener("click",closeTerms);
+$("termsModal").addEventListener("click",e=>{if(e.target===$("termsModal"))closeTerms()});
+function openPrivacy(){ $("privacyModal").classList.add("show"); document.body.style.overflow="hidden"; }
+function closePrivacy(){ $("privacyModal").classList.remove("show"); document.body.style.overflow=""; }
+document.querySelectorAll(".openPrivacy").forEach(b=>b.addEventListener("click",openPrivacy));
+$("privacyClose").addEventListener("click",closePrivacy);
+$("privacyModal").addEventListener("click",e=>{if(e.target===$("privacyModal"))closePrivacy()});
+
+let session = null, user = null, currentCard = null, photoData = "", authMode = "signin", publicMode = false;
+let currentShareUrl = "", currentShareToken = "", publicShareView = "", publicShareCheckTimer = null;
+const createMode = new URLSearchParams(location.search).get("create") === "1";
+
+const formIds = ["slug","full_name","job_title","company","description","location","website","phone","email","whatsapp","linkedin_url","facebook_url","instagram_url","card_color"];
+
+function msg(text,type="ok"){
+  const n=$("notice"); n.textContent=text; n.className="notice show "+type;
+  window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>n.classList.remove("show"),4200);
+}
+function cleanUrl(v){if(!v)return ""; return /^https?:\/\//i.test(v)?v:"https://"+v;}
+function slugify(v){return (v||"").toLowerCase().trim().replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+function safeName(v){return (v||"dshario").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"dshario";}
+function contrast(bg){const h=(bg||"#eff6ff").replace("#","");if(h.length!==6)return "#0f172a";const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return ((r*299+g*587+b*114)/1000)>160?"#0f172a":"#ffffff";}
+function muted(bg){return contrast(bg)==="#ffffff"?"rgba(255,255,255,.82)":"#5b6b83";}
+function activePrivacyView(){
+  if(publicMode) return publicShareView || new URLSearchParams(location.search).get("view") || "professional";
+  return $("shareView")?.value || $("privacy_view")?.value || localStorage.getItem("dshario-privacy-view") || "professional";
+}
+function shareUrl(card=currentCard){
+  return card?.slug ? location.origin+location.pathname+"?card="+encodeURIComponent(card.slug)+"&view="+encodeURIComponent(activePrivacyView()) : location.origin+location.pathname;
+}
+function activeShareUrl(){ return currentShareUrl || shareUrl(); }
+function invalidateShareLink(){
+  currentShareUrl=""; currentShareToken="";
+  if($("revokeShareLinkBtn")) $("revokeShareLinkBtn").style.display="none";
+  if($("shareLinkStatus")) $("shareLinkStatus").textContent="Create a link before copying, sharing or showing its QR code.";
+}
+function expiryDate(choice){
+  if(choice==="permanent") return null;
+  const ms=choice==="24h"?86400000:choice==="7d"?604800000:2592000000;
+  return new Date(Date.now()+ms).toISOString();
+}
+async function createExpiringShareLink(){
+  if(!user||!currentCard?.slug){msg("Sign in and save your DShario before creating a share link.","info");return null}
+  const token=(crypto.randomUUID?crypto.randomUUID().replace(/-/g,""):(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)));
+  const choice=$("shareExpiry").value;
+  const payload={user_id:user.id,card_slug:currentCard.slug,token,privacy_view:activePrivacyView(),expires_at:expiryDate(choice),revoked:false};
+  const {error}=await sb.from("share_links").insert(payload);
+  if(error){msg("Could not create share link: "+error.message,"err");return null}
+  currentShareToken=token; currentShareUrl=location.origin+location.pathname+"?share="+encodeURIComponent(token);
+  $("revokeShareLinkBtn").style.display="inline-block";
+  const labels={permanent:"Permanent", "24h":"24 hours", "7d":"7 days", "30d":"30 days"};
+  $("shareLinkStatus").textContent="✓ "+labels[choice]+" link ready.";
+  $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(currentShareUrl);
+  $("qrText").textContent=currentShareUrl;
+  msg(labels[choice]+" share link created.","ok");
+  return currentShareUrl;
+}
+function showExpiredShareLink(){
+  if(publicShareCheckTimer){clearInterval(publicShareCheckTimer);publicShareCheckTimer=null}
+  currentCard=null;
+  render(null);
+  setView("card");
+  msg("This DShario share link has expired, was revoked, or is invalid.","err");
+}
+async function recheckSharedLink(token){
+  const {data,error}=await sb.rpc("get_valid_share_link",{link_token:token});
+  const link=Array.isArray(data)?data[0]:data;
+  if(error||!link){showExpiredShareLink();return false}
+  return true;
+}
+function startShareLinkRecheck(token){
+  if(publicShareCheckTimer) clearInterval(publicShareCheckTimer);
+  publicShareCheckTimer=setInterval(async()=>{
+    if(document.visibilityState!=="visible") return;
+    await recheckSharedLink(token);
+  },30000);
+  document.addEventListener("visibilitychange",async()=>{
+    if(document.visibilityState==="visible" && publicMode && publicShareCheckTimer){
+      await recheckSharedLink(token);
+    }
+  },{once:false});
+}
+async function loadSharedCard(token){
+  publicMode=true; $("tabs").style.display="none"; $("publicHeader").style.display="block"; $("accountPill").style.display="none";
+  const {data,error}=await sb.rpc("get_valid_share_link",{link_token:token});
+  const link=Array.isArray(data)?data[0]:data;
+  if(error||!link){showExpiredShareLink();return}
+  publicShareView=link.privacy_view||"professional";
+  const {data:cardData,error:cardError}=await sb.rpc("get_public_card",{card_slug:link.card_slug});
+  const card=Array.isArray(cardData)?cardData[0]:cardData;
+  if(cardError||!card){render(null);setView("card");msg("This DShario is no longer available.","err");return}
+  render(card); setView("card");
+  startShareLinkRecheck(token);
+}
+function setView(name){
+  ["home","card","edit","account"].forEach(v=>$(v+"View").classList.toggle("active",v===name));
+  $("myTab").classList.toggle("active",name==="card"); $("editTab").classList.toggle("active",name==="edit"); $("accountTab").classList.toggle("active",name==="account");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function setForm(card={}){
+  formIds.forEach(id=>{ if($(id)) $(id).value = card[id] ?? (id==="card_color"?"#eff6ff":""); });
+  $("show_phone").checked=card.show_phone!==false; $("show_email").checked=card.show_email!==false;
+  $("privacy_view").value=card.privacy_view||"professional"; photoData=card.photo_url||""; renderPhotoPreview();
+}
+function getForm(){
+  const o={}; formIds.forEach(id=>o[id]=$(id).value.trim());
+  o.slug=slugify(o.slug); o.show_phone=$("show_phone").checked; o.show_email=$("show_email").checked; o.photo_url=photoData||null; o.is_public=true; o.privacy_view=$("privacy_view").value||"professional";
+  return o;
+}
+function renderPhotoPreview(){
+  $("photoPreview").innerHTML=photoData?`<img src="${photoData}" alt="Profile preview">`:"No photo";
+}
+function applyPrivacyView(c){
+  const view=activePrivacyView();
+  const show=(id,on,display="flex")=>{ if($(id)) $(id).style.display=on?display:"none"; };
+
+  // Base professional identity
+  show("pPhoto", !!c.photo_url, "block");
+  $("pRole").style.display = (view==="social") ? "none" : "block";
+  $("pCompany").style.display = (view==="social") ? "none" : "block";
+  $("pTagline").style.display = (view==="social") ? "none" : "block";
+  show("locRow", !!c.location && (view==="business"||view==="full"));
+  show("webRow", !!c.website && (view==="professional"||view==="business"||view==="full"));
+  show("liRow", !!c.linkedin_url && (view!=="social" || !!c.linkedin_url));
+  show("fbRow", !!c.facebook_url && (view==="social"||view==="full"));
+  show("igRow", !!c.instagram_url && (view==="social"||view==="full"));
+  show("socialEmpty", view==="social" && !c.linkedin_url && !c.facebook_url && !c.instagram_url, "block");
+
+  const direct = view==="business"||view==="full";
+  show("phoneRow", !!c.phone && direct && c.show_phone!==false);
+  show("callBtn", false);
+  show("emailRow", !!c.email && direct && c.show_email!==false);
+  show("emailBtn", false);
+  show("waBtn", false);
+
+  const labels={professional:"Professional view",business:"Business view",social:"Social view",full:"Full view"};
+  if($("viewBadge")) $("viewBadge").textContent=labels[view]||labels.professional;
+  if($("shareViewBox")) $("shareViewBox").style.display=publicMode?"none":"block";
+}
+function render(card){
+  currentCard=card||null;
+  const c=card||{};
+  const bg=c.card_color||"#eff6ff", fg=contrast(bg);
+  $("card").style.background=bg; $("card").style.color=fg;
+  $("pName").textContent=c.full_name||"Your name"; $("pRole").textContent=c.job_title||"Professional title"; $("pCompany").textContent=c.company||"Company / organisation"; $("pTagline").textContent=c.description||"Your short introduction will appear here.";
+  ["pRole","pTagline"].forEach(id=>$(id).style.color=muted(bg));
+  $("pPhoto").src=c.photo_url||""; $("pPhoto").style.display=c.photo_url?"block":"none";
+  $("pLocation").textContent=c.location||""; $("locRow").style.display=c.location?"flex":"none";
+  const phone=c.phone||""; $("pPhone").textContent=phone; $("phoneRow").href=phone?"tel:"+phone.replace(/[^+\d]/g,""):"#"; $("phoneRow").style.display=phone?"flex":"none"; $("callBtn").href=$("phoneRow").href; $("callBtn").style.display=phone?"flex":"none";
+  const email=c.email||""; $("pEmail").textContent=email; $("emailRow").href=email?"mailto:"+email:"#"; $("emailRow").style.display=email?"flex":"none"; $("emailBtn").href=$("emailRow").href; $("emailBtn").style.display=email?"flex":"none";
+  const links=[["webRow",c.website],["liRow",c.linkedin_url],["fbRow",c.facebook_url],["igRow",c.instagram_url]];
+  links.forEach(([id,v])=>{ $(id).href=cleanUrl(v)||"#"; $(id).style.display=v?"flex":"none"; });
+  const u=publicMode?location.href:(currentShareUrl||shareUrl(c)); $("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u); $("qrText").textContent=u;
+  applyPrivacyView(c); $("savedBanner").style.display=(!publicMode && user && c.id)?"block":"none";
+  if($("exchangeBox")) $("exchangeBox").style.display=(publicMode&&!!c.slug)?"block":"none";
+  // Owner manages/shares their own card; recipients save or exchange details.
+  if($("vcfBtn")) $("vcfBtn").style.display=publicMode?"flex":"none";
+  if($("shareBtn")) $("shareBtn").style.display=publicMode?"none":"flex";
+  if($("copyBtn")) $("copyBtn").style.display=publicMode?"none":"flex";
+  if($("waBtn")) $("waBtn").style.display="none";
+}
+async function loadOwnerCard(){
+  if(!user){currentCard=null;render(null);return}
+  const {data,error}=await sb.from("cards").select("*").eq("user_id",user.id).limit(1).maybeSingle();
+  if(error){msg("Could not load My Card: "+error.message,"err");return}
+  currentCard=data||null; if(data){render(data);setForm(data);$("deleteBtn").style.display="inline-block"} else {render(null);setForm({card_color:"#eff6ff"});$("deleteBtn").style.display="none"}
+}
+async function loadPublicCard(slug){
+  publicMode=true; $("tabs").style.display="none"; $("publicHeader").style.display="block"; $("accountPill").style.display="none";
+  const {data,error}=await sb.rpc("get_public_card",{card_slug:slug});
+  const card=Array.isArray(data)?data[0]:data;
+  if(error||!card){render(null);msg("This DShario was not found or is private.","err");return}
+  render(card); setView("card");
+}
+async function refreshAuth(loadCard=false){
+  const {data}=await sb.auth.getSession(); session=data.session; user=session?.user||null;
+  $("accountPill").textContent=user?"My account":"Sign in";
+  $("signedOutBox").style.display=user?"none":"block"; $("signedInBox").style.display=user?"block":"none";
+  if(user){
+    $("userEmail").textContent=user.email||""; if($("receivedContactsPanel")) $("receivedContactsPanel").style.display="block";
+    if(loadCard) await loadOwnerCard();
+  } else {
+    currentCard=null; if($("receivedContactsPanel")) $("receivedContactsPanel").style.display="none";
+  }
+}
+async function saveCloud(){
+  if(!user){msg("Please sign in before saving your DShario online.","info");setView("account");return}
+  const d=getForm(); if(!d.full_name){msg("Please enter your full name.","err");return} if(!d.slug){msg("Please choose your personal DShario name.","err");return}
+  const {privacy_view,...dbCard}=d; try{localStorage.setItem("dshario-privacy-view",privacy_view)}catch(e){} const payload={...dbCard,user_id:user.id,updated_at:new Date().toISOString()};
+  let res;
+  if(currentCard?.id) res=await sb.from("cards").update(payload).eq("id",currentCard.id).select().single();
+  else res=await sb.from("cards").insert(payload).select().single();
+  if(res.error){
+    const m=res.error.message.includes("duplicate")?"That DShario name is already taken. Please choose another.":res.error.message;
+    msg("Could not save: "+m,"err"); return;
+  }
+  currentCard=res.data; render(currentCard); setForm(currentCard); $("deleteBtn").style.display="inline-block"; setView("card"); msg("✓ DShario saved online. You can now share the same permanent link.","ok");
+}
+async function deleteCard(){
+  if(!user||!currentCard?.id)return; if(!confirm("Delete this DShario permanently?"))return;
+  const {error}=await sb.from("cards").delete().eq("id",currentCard.id);
+  if(error){msg(error.message,"err");return}
+  currentCard=null;setForm({card_color:"#eff6ff"});render(null);$("deleteBtn").style.display="none";setView("edit");msg("Card deleted.","info");
+}
+
+$("photo").addEventListener("change",e=>{
+  const file=e.target.files?.[0]; if(!file)return; if(!file.type.startsWith("image/")){msg("Please choose an image file.","err");return}
+  const r=new FileReader(); r.onload=()=>{const img=new Image(); img.onload=()=>{const c=document.createElement("canvas");c.width=c.height=220;const x=c.getContext("2d"),s=Math.max(220/img.width,220/img.height),w=img.width*s,h=img.height*s;x.drawImage(img,(220-w)/2,(220-h)/2,w,h);photoData=c.toDataURL("image/jpeg",.68);renderPhotoPreview()};img.src=r.result};r.readAsDataURL(file);
+});
+$("removePhoto").onclick=()=>{photoData="";$("photo").value="";renderPhotoPreview()};
+$("slug").addEventListener("input",()=>{$("slug").value=slugify($("slug").value)});
+
+$("saveCloudBtn").onclick=saveCloud; $("deleteBtn").onclick=deleteCard;
+$("previewBtn").onclick=()=>{const d=getForm(); render({...d,id:currentCard?.id}); setView("card")};
+$("myTab").onclick=async()=>{if(!user){setView("account");return} await loadOwnerCard(); setView(currentCard?"card":"edit")}; $("editTab").onclick=async()=>{if(!user){setView("account");msg("Sign in or create an account to save DShario online.","info")}else{if(!currentCard) await loadOwnerCard();setForm(currentCard||{});setView("edit")}}; $("accountTab").onclick=()=>setView("account"); $("accountPill").onclick=()=>setView("account");
+
+function setAuthMode(mode){authMode=mode;$("signInMode").classList.toggle("active",mode==="signin");$("signUpMode").classList.toggle("active",mode==="signup");$("authSubmit").textContent=mode==="signin"?"Sign in":"Create account";$("authPassword").autocomplete=mode==="signin"?"current-password":"new-password"}
+$("homeCreateBtn").onclick=async()=>{if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}};
+$("homeSigninBtn").onclick=()=>{setAuthMode("signin");setView("account")};
+$("signInMode").onclick=()=>setAuthMode("signin"); $("signUpMode").onclick=()=>setAuthMode("signup");
+$("authSubmit").onclick=async()=>{
+  const email=$("authEmail").value.trim(),password=$("authPassword").value;
+  if(!email||password.length<6){$("authStatus").textContent="Enter a valid email and a password of at least 6 characters.";return}
+  if(authMode==="signup"){
+    const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
+    if(error){$("authStatus").textContent=error.message;return}
+    $("authStatus").textContent=data.session?"Account created and signed in.":"Account created. Check your email and confirm it, then return here to sign in.";
+  }else{
+    const {error}=await sb.auth.signInWithPassword({email,password});
+    if(error){$("authStatus").textContent=error.message;return}
+    $("authStatus").textContent="Signed in."; await refreshAuth(true); setView(currentCard?"card":"edit"); msg("Signed in successfully.","ok");
+  }
+};
+$("signOutBtn").onclick=async()=>{await sb.auth.signOut();user=null;session=null;currentCard=null;render(null);setView("account");await refreshAuth();msg("Signed out.","info")};
+sb.auth.onAuthStateChange(async(event,s)=>{
+  session=s; user=s?.user||null;
+  if(publicMode) return;
+  await refreshAuth(false);
+  if(createMode){
+    if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}
+  }
+});
+
+
+$("shareView").addEventListener("change",()=>{
+  try{localStorage.setItem("dshario-privacy-view",$("shareView").value)}catch(e){}
+  invalidateShareLink();
+  if(currentCard) applyPrivacyView(currentCard);
+});
+$("shareExpiry").addEventListener("change",invalidateShareLink);
+$("privacy_view").addEventListener("change",()=>{
+  $("shareView").value=$("privacy_view").value;
+  try{localStorage.setItem("dshario-privacy-view",$("privacy_view").value)}catch(e){}
+  invalidateShareLink();
+});
+$("createShareLinkBtn").onclick=createExpiringShareLink;
+$("revokeShareLinkBtn").onclick=async()=>{
+  if(!currentShareToken||!user)return;
+  const {error}=await sb.from("share_links").update({revoked:true}).eq("token",currentShareToken).eq("user_id",user.id);
+  if(error){msg("Could not revoke link: "+error.message,"err");return}
+  currentShareUrl=""; currentShareToken=""; $("revokeShareLinkBtn").style.display="none"; $("shareLinkStatus").textContent="✓ Link revoked. Create a new link when you want to share again."; msg("Share link revoked.","ok");
+};
+async function ensureShareUrl(){ return currentShareUrl || await createExpiringShareLink(); }
+$("copyBtn").onclick=async()=>{const u=await ensureShareUrl();if(!u)return;try{await navigator.clipboard.writeText(u);msg("DShario link copied.","ok")}catch{prompt("Copy this DShario:",u)}};
+$("shareBtn").onclick=async()=>{
+  const u=await ensureShareUrl(); if(!u)return;
+  if(navigator.share){try{await navigator.share({text:u})}catch(e){if(e?.name!=="AbortError"){try{await navigator.clipboard.writeText(u);msg("Link copied instead.","ok")}catch{}}}}else{try{await navigator.clipboard.writeText(u);msg("DShario link copied.","ok")}catch{prompt("Copy this DShario:",u)}}
+};
+$("waBtn").onclick=async()=>{const u=await ensureShareUrl();if(!u)return;const c=currentCard||{},t=encodeURIComponent(([c.full_name,c.job_title,c.company].filter(Boolean).join(" • ")||"View my DShario")+"\n"+u);window.open("https://wa.me/?text="+t,"_blank")};
+$("qrBtn").onclick=async()=>{if(!publicMode){const u=await ensureShareUrl();if(!u)return;$("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data="+encodeURIComponent(u);$("qrText").textContent=u}$("qrPanel").classList.toggle("show")};
+
+function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+$("vcfBtn").onclick=()=>{const d=currentCard||{};if(!d.full_name)return;const esc=s=>(s||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;");const parts=d.full_name.split(/\s+/),last=parts.pop()||"",first=parts.join(" ");let v=["BEGIN:VCARD","VERSION:3.0","N:"+esc(last)+";"+esc(first)+";;;","FN:"+esc(d.full_name)];if(d.company)v.push("ORG:"+esc(d.company));if(d.job_title)v.push("TITLE:"+esc(d.job_title));if(d.location)v.push("ADR:;;;;"+esc(d.location)+";;;");if(d.phone)v.push("TEL;TYPE=CELL:"+esc(d.phone));if(d.email)v.push("EMAIL;TYPE=INTERNET:"+esc(d.email));if(d.website)v.push("URL:"+cleanUrl(d.website));v.push("END:VCARD");downloadBlob(new Blob([v.join("\r\n")],{type:"text/vcard"}),safeName(d.full_name)+".vcf")};
+
+function loadImg(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src})}
+$("pngBtn").onclick=async()=>{
+  const d=currentCard||{};
+  const c=document.createElement("canvas");c.width=1200;c.height=630;
+  const x=c.getContext("2d"),bg=d.card_color||"#eff6ff",fg=contrast(bg),mt=muted(bg);
+  x.fillStyle=bg;x.fillRect(0,0,1200,630);
+
+  x.strokeStyle="rgba(30,64,175,.16)";x.lineWidth=3;
+  x.beginPath();if(x.roundRect)x.roundRect(24,24,1152,582,34);else x.rect(24,24,1152,582);x.stroke();
+
+  let tx=330;
+  if(d.photo_url){
+    try{
+      const img=await loadImg(d.photo_url);
+      x.save();x.beginPath();if(x.roundRect)x.roundRect(70,80,200,200,32);else x.rect(70,80,200,200);x.clip();
+      const s=Math.max(200/img.width,200/img.height),w=img.width*s,h=img.height*s;
+      x.drawImage(img,70+(200-w)/2,80+(200-h)/2,w,h);x.restore();
+    }catch{}
+  }else tx=80;
+
+  x.textAlign="left";x.textBaseline="top";
+  x.fillStyle=fg;x.font="900 50px Arial";x.fillText(d.full_name||"My DShario",tx,86,790);
+
+  let y=158;
+  const line=(v,font,color=mt)=>{
+    v=(v||"").trim();if(!v)return;
+    x.fillStyle=color;x.font=font;x.fillText(v,tx,y,790);y+=44;
+  };
+  line(d.job_title,"700 28px Arial");
+  line(d.company,"800 28px Arial",fg);
+
+  const desc=(d.description||"").trim();
+  if(desc){
+    y+=10;x.fillStyle=mt;x.font="23px Arial";
+    let row="", words=desc.split(/\s+/);
+    for(const word of words){
+      const test=row?row+" "+word:word;
+      if(x.measureText(test).width>760&&row){x.fillText(row,tx,y);y+=34;row=word}else row=test;
+    }
+    if(row)x.fillText(row,tx,y);y+=40;
+  }
+
+  if(d.location){x.fillStyle=fg;x.font="700 22px Arial";x.fillText("⌖  "+d.location,tx,Math.min(y+8,465),780)}
+
+  x.fillStyle=fg;x.font="900 28px Arial";x.fillText("DS",70,538);
+  x.textAlign="right";x.fillStyle=mt;x.font="22px Arial";x.fillText("Keep in touch.",1130,542);
+
+  c.toBlob(b=>downloadBlob(b,safeName(d.full_name||"dshario")+"-card.png"),"image/png");
+};
+
+
+let exchangeMode="guest";
+function clearExchangeForm(){["exName","exPhone","exEmail","exCompany","exTitle"].forEach(id=>$(id).value="");$("exConsent").checked=false;$("guestUpsell").classList.remove("show");}
+async function openGuestExchange(){exchangeMode="guest";clearExchangeForm();$("exchangeForm").classList.add("show");$("exName").focus();}
+async function openMemberExchange(){
+  const {data:{session:exSession}}=await sb.auth.getSession();
+  if(!exSession?.user){
+    msg("Please sign in to exchange with your DShario. Opening the account page…","info"); setTimeout(()=>{location.href=location.origin+location.pathname+"#account"},450); return;
+  }
+  exchangeMode="dshario"; clearExchangeForm();
+  const {data:mine}=await sb.from("cards").select("full_name,phone,email,company,job_title").eq("user_id",exSession.user.id).limit(1).maybeSingle();
+  $("exName").value=mine?.full_name||""; $("exPhone").value=mine?.phone||""; $("exEmail").value=mine?.email||exSession.user.email||""; $("exCompany").value=mine?.company||""; $("exTitle").value=mine?.job_title||"";
+  $("exchangeForm").classList.add("show");
+  if(!mine) msg("You are signed in, but no saved DShario card was found. Enter the details you want to share.","info");
+}
+async function submitExchange(){
+  if(!currentCard?.slug){msg("This card is not available for contact exchange.","err");return}
+  const name=$("exName").value.trim(); if(!name){msg("Please enter your name.","err");return}
+  if(!$("exConsent").checked){msg("Please confirm consent before sending your contact.","err");return}
+  $("sendExchangeBtn").disabled=true;
+  const {error}=await sb.rpc("submit_contact_exchange",{p_card_slug:currentCard.slug,p_sender_name:name,p_sender_phone:$("exPhone").value.trim()||null,p_sender_email:$("exEmail").value.trim()||null,p_sender_company:$("exCompany").value.trim()||null,p_sender_title:$("exTitle").value.trim()||null,p_consent_given:true});
+  $("sendExchangeBtn").disabled=false;
+  if(error){
+    const em=(error.message||"")+" "+(error.hint||"");
+    if(em.includes("CONTACT_INBOX_FULL")){
+      msg(currentLang==="bn"?"এই DShario-এর কন্টাক্ট ইনবক্স পূর্ণ। নতুন কন্টাক্ট গ্রহণ করতে আগে একটি কন্টাক্ট সেভ করে DShario থেকে মুছতে হবে।":"This DShario contact inbox is full. Save and delete an existing contact before receiving another.","err");
+    }else{
+      msg((currentLang==="bn"?"কন্টাক্ট পাঠানো যায়নি: ":"Could not exchange contact: ")+error.message,"err");
+    }
+    return
+  }
+  msg("✓ Your contact was shared with this DShario owner.","ok");
+  if(exchangeMode==="guest") $("guestUpsell").classList.add("show"); else $("exchangeForm").classList.remove("show");
+}
+function vcfEscape(v){return String(v||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;")}
+function saveReceivedContact(c){
+  if(!c.sender_phone){
+    msg("No mobile number was provided for this contact.","err");
+    return;
+  }
+  const name=(c.sender_name||"DShario contact").trim();
+  const parts=name.split(/\s+/),last=parts.pop()||"",first=parts.join(" ");
+  const lines=[
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "N:"+vcfEscape(last)+";"+vcfEscape(first)+";;;",
+    "FN:"+vcfEscape(name),
+    "TEL;TYPE=CELL:"+vcfEscape(c.sender_phone),
+    "END:VCARD"
+  ];
+  downloadBlob(
+    new Blob([lines.join("\r\n")],{type:"text/vcard;charset=utf-8"}),
+    safeName(name)+".vcf"
+  );
+  msg("Your phone should now open the contact-saving option.","ok");
+}
+function receivedDate(v){
+  try{
+    return new Intl.DateTimeFormat("en-GB",{
+      day:"2-digit",month:"short",year:"numeric",
+      hour:"numeric",minute:"2-digit",hour12:true
+    }).format(new Date(v));
+  }catch{
+    return "";
+  }
+}
+async function loadReceivedContacts(){
+  if(!user)return;
+  const {data,error}=await sb.from("contact_exchanges").select("id,exchange_type,sender_name,sender_phone,sender_email,sender_company,sender_title,created_at").eq("owner_user_id",user.id).order("created_at",{ascending:false});
+  if(error){msg("Could not load received contacts: "+error.message,"err");return}
+  const list=$("receivedContactsList"); list.innerHTML="";
+  const count=data?.length||0; $("receivedContactsCount").textContent=Math.min(count,10)+" / 10 pending contacts"+(count>=10?" • Inbox full — save or delete a contact to make room.":"");
+  if(!count){list.innerHTML='<div class="hint">No contacts received yet.</div>';return}
+  data.slice(0,10).forEach(c=>{
+    const d=document.createElement("div"); d.className="receivedItem";
+    const source=c.exchange_type==="dshario"?"DShario member":"Contact sent back";
+    const quick=[source, c.sender_phone||c.sender_email||"", "Received "+receivedDate(c.created_at)].filter(Boolean).join(" • ");
+    d.innerHTML=`<div class="receivedSummary"><div><strong></strong><div class="receivedMeta"></div></div><span>›</span></div><div class="receivedDetails"></div>`;
+    d.querySelector("strong").textContent=c.sender_name; d.querySelector(".receivedMeta").textContent=quick;
+    const details=d.querySelector(".receivedDetails");
+    const rows=[["Name",c.sender_name],["Mobile",c.sender_phone],["Email",c.sender_email],["Job title",c.sender_title],["Company",c.sender_company],["Source",source],["Received",receivedDate(c.created_at)]].filter(x=>x[1]);
+    rows.forEach(([k,v])=>{const row=document.createElement("div");row.className="detailRow";const a=document.createElement("div");a.className="detailLabel";a.textContent=k;const b=document.createElement("div");b.textContent=v;row.append(a,b);details.appendChild(row)});
+    const acts=document.createElement("div");acts.className="receivedActions";
+    const save=document.createElement("button");save.className="mini";save.type="button";save.textContent="＋ Save to Contacts";save.onclick=e=>{e.stopPropagation();saveReceivedContact(c)};
+    const del=document.createElement("button");del.className="mini";del.type="button";del.textContent="Delete from DShario";del.onclick=async e=>{e.stopPropagation();if(!confirm("Delete this received contact from DShario?"))return;const {error}=await sb.from("contact_exchanges").delete().eq("id",c.id);if(error)msg(error.message,"err");else{msg("Contact deleted from DShario.","ok");loadReceivedContacts()}};
+    acts.append(save,del);details.appendChild(acts);
+    d.querySelector(".receivedSummary").onclick=()=>d.classList.toggle("open"); list.appendChild(d);
+  });
+}
+$("memberExchangeBtn").onclick=openMemberExchange; $("guestExchangeBtn").onclick=openGuestExchange; $("sendExchangeBtn").onclick=submitExchange; $("refreshContactsBtn").onclick=loadReceivedContacts;
+
+(async function init(){
+  const params=new URLSearchParams(location.search),shareToken=params.get("share"),slug=params.get("card");
+
+  // A secure share URL deliberately opens only the card/view represented by its token.
+  if(shareToken){
+    await loadSharedCard(shareToken);
+    return;
+  }
+
+  if(slug){
+    await loadPublicCard(slug);
+    return;
+  }
+
+  // Production rule: the plain DShario URL is always a neutral landing page.
+  // Never preload any saved card here. My Card is loaded only after an authenticated user taps My Card.
+  await refreshAuth(false);
+  currentCard=null;
+  render(null);
+  publicMode=false;
+  $("tabs").style.display="grid";
+  $("publicHeader").style.display="none";
+  $("accountPill").style.display="inline-block";
+
+  if(createMode){
+    if(user){await loadOwnerCard();setForm(currentCard||{});setView("edit")}else{setAuthMode("signup");setView("account")}
+    return;
+  }
+
+  setView("home");
+})();
+</script>
+
+<script>
+let currentLang = localStorage.getItem("dshario-lang") || "en";
+
+const bnText = {
+  "Sign in":"সাইন ইন",
+  "Signed in":"সাইন ইন করা আছে",
+  "▣ My Card":"▣ আমার কার্ড",
+  "✎ Edit / Create":"✎ এডিট / তৈরি",
+  "◉ Account":"◉ অ্যাকাউন্ট",
+  "Public DShario • No account required to view":"পাবলিক DShario • দেখতে অ্যাকাউন্ট লাগবে না",
+  "Your name":"আপনার নাম",
+  "Professional title":"পেশাগত পদবি",
+  "Company / organisation":"কোম্পানি / প্রতিষ্ঠান",
+  "Your short introduction will appear here.":"আপনার সংক্ষিপ্ত পরিচিতি এখানে দেখা যাবে।",
+  "Location":"অবস্থান",
+  "Website":"ওয়েবসাইট",
+  "No social links added.":"কোনো সামাজিক লিংক যোগ করা হয়নি।",
+  "✓ Saved online — sign in from another device to open My Card":"✓ অনলাইনে সেভ হয়েছে — অন্য ডিভাইস থেকে My Card খুলতে সাইন ইন করুন",
+  "Keep in touch.":"যোগাযোগ রাখুন।",
+  "Professional view":"প্রফেশনাল ভিউ",
+  "Business view":"বিজনেস ভিউ",
+  "Social view":"সোশ্যাল ভিউ",
+  "Full view":"ফুল ভিউ",
+  "Choose what you want to share":"আপনি কী শেয়ার করতে চান বেছে নিন",
+  "Professional — limited professional details":"প্রফেশনাল — সীমিত পেশাগত তথ্য",
+  "Business — include direct contact details":"বিজনেস — সরাসরি যোগাযোগের তথ্যসহ",
+  "Social — social links only":"সোশ্যাল — শুধু সামাজিক লিংক",
+  "Full — all details on your card":"ফুল — আপনার কার্ডের সব তথ্য",
+  "The generated link and QR code will use this privacy view.":"তৈরি করা লিংক ও QR কোড এই প্রাইভেসি ভিউ ব্যবহার করবে।",
+  "How long should this share link work?":"এই শেয়ার লিংক কতদিন কাজ করবে?",
+  "Permanent":"স্থায়ী",
+  "24 hours":"২৪ ঘণ্টা",
+  "7 days":"৭ দিন",
+  "30 days":"৩০ দিন",
+  "Create Share Link":"শেয়ার লিংক তৈরি করুন",
+  "Revoke This Link":"এই লিংক বাতিল করুন",
+  "Create a link before copying, sharing or showing its QR code.":"কপি, শেয়ার বা QR কোড দেখানোর আগে একটি লিংক তৈরি করুন।",
+  "☎ Call":"☎ কল",
+  "✉ Email":"✉ ইমেইল",
+  "◉ Share on WhatsApp":"◉ WhatsApp-এ শেয়ার",
+  "⌯ Share DShario":"⌯ DShario শেয়ার",
+  "🔗 Copy Link":"🔗 লিংক কপি",
+  "▦ QR Code":"▦ QR কোড",
+  "＋ Save to Contacts":"＋ কন্টাক্টে সেভ করুন",
+  "⇩ Download as Image":"⇩ ছবি হিসেবে ডাউনলোড",
+  "Exchange contact":"যোগাযোগের তথ্য বিনিময়",
+  "Send your contact back in seconds — no DShario account required.":"কয়েক সেকেন্ডে আপনার যোগাযোগের তথ্য পাঠান — DShario অ্যাকাউন্ট লাগবে না।",
+  "Send my contact back":"আমার যোগাযোগের তথ্য পাঠান",
+  "Exchange with my DShario":"আমার DShario দিয়ে তথ্য বিনিময় করুন",
+  "Already use DShario? Sign in and send your saved details with less typing.":"আগেই DShario ব্যবহার করেন? সাইন ইন করে কম টাইপ করে আপনার সেভ করা তথ্য পাঠান।",
+  "Name *":"নাম *",
+  "Phone":"মোবাইল",
+  "Email":"ইমেইল",
+  "Company":"কোম্পানি",
+  "Job title":"পদবি",
+  "I agree to share these selected contact details with this DShario card owner. The owner may save these details to their phone. DShario will keep the exchange in the owner’s temporary contact inbox until it is deleted, subject to the Privacy Policy.":"আমি এই নির্বাচিত যোগাযোগের তথ্য DShario কার্ডের মালিকের সাথে শেয়ার করতে সম্মত। মালিক তথ্যগুলো তার ফোনে সেভ করতে পারেন। Privacy Policy অনুযায়ী মুছে ফেলা পর্যন্ত DShario এগুলো মালিকের অস্থায়ী কন্টাক্ট ইনবক্সে রাখবে।",
+  "Send my contact":"আমার কন্টাক্ট পাঠান",
+  "✓ Contact sent. Want your own digital card? Create your free DShario — designed for easy mobile sharing.":"✓ কন্টাক্ট পাঠানো হয়েছে। নিজের ডিজিটাল কার্ড চান? সহজ মোবাইল শেয়ারিংয়ের জন্য আপনার ফ্রি DShario তৈরি করুন।",
+  "Scan to open this DShario":"এই DShario খুলতে স্ক্যান করুন",
+  "Received Contacts":"প্রাপ্ত কন্টাক্ট",
+  "Temporary inbox — save contacts you want to keep to your phone, then delete them from DShario.":"অস্থায়ী ইনবক্স — যেসব কন্টাক্ট রাখতে চান ফোনে সেভ করুন, তারপর DShario থেকে মুছে দিন।",
+  "Refresh":"রিফ্রেশ",
+  "No contacts received yet.":"এখনও কোনো কন্টাক্ট পাওয়া যায়নি।",
+  "Delete from DShario":"DShario থেকে মুছুন",
+  "Name":"নাম",
+  "Mobile":"মোবাইল",
+  "Job title":"পদবি",
+  "Source":"উৎস",
+  "Received":"প্রাপ্ত সময়",
+  "DShario member":"DShario সদস্য",
+  "Contact sent back":"পাঠানো কন্টাক্ট",
+  "Account":"অ্যাকাউন্ট",
+  "Create account":"অ্যাকাউন্ট তৈরি করুন",
+  "Password":"পাসওয়ার্ড",
+  "Sign out":"সাইন আউট",
+  "Save Card":"কার্ড সেভ করুন",
+  "Delete Card":"কার্ড মুছুন",
+  "Privacy view":"প্রাইভেসি ভিউ",
+  "Close":"বন্ধ করুন"
+};
+
+const enText = {};
+function rememberEnglish(){
+  document.querySelectorAll("body *").forEach(el=>{
+    if(el.children.length===0){
+      const t=el.textContent.trim();
+      if(t && !el.dataset.enText) el.dataset.enText=t;
+    }
+  });
+}
+function translateDynamicText(t){
+  if(currentLang!=="bn") return t;
+  if(/^(\d+)\s*\/\s*10 pending contacts/.test(t)){
+    const n=t.match(/^(\d+)/)?.[1]||"0";
+    return n+" / ১০টি অপেক্ষমাণ কন্টাক্ট"+(t.includes("Inbox full")?" • ইনবক্স পূর্ণ — জায়গা করতে একটি কন্টাক্ট সেভ করে মুছুন।":"");
+  }
+  if(t.startsWith("Received ")) return "প্রাপ্ত "+t.slice(9);
+  return bnText[t] || t;
+}
+function applyLanguage(){
+  document.documentElement.lang=currentLang==="bn"?"bn":"en";
+  document.querySelectorAll("body *").forEach(el=>{
+    if(el.children.length===0){
+      if(!el.dataset.enText) el.dataset.enText=el.textContent.trim();
+      const original=el.dataset.enText;
+      if(original) el.textContent=currentLang==="bn"?translateDynamicText(original):original;
+    }
+  });
+  document.querySelectorAll("option").forEach(o=>{
+    if(!o.dataset.enText) o.dataset.enText=o.textContent.trim();
+    o.textContent=currentLang==="bn"?(bnText[o.dataset.enText]||o.dataset.enText):o.dataset.enText;
+  });
+  const b=document.getElementById("langToggle");
+  if(b){b.textContent=currentLang==="bn"?"EN":"বাংলা"; b.dataset.enText="";}
+}
+function setLanguage(lang){
+  currentLang=lang;
+  localStorage.setItem("dshario-lang",lang);
+  applyLanguage();
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  rememberEnglish();
+  applyLanguage();
+  document.getElementById("langToggle")?.addEventListener("click",()=>setLanguage(currentLang==="en"?"bn":"en"));
+  const obs=new MutationObserver(()=>{ if(currentLang==="bn"){ requestAnimationFrame(applyLanguage); }});
+  obs.observe(document.body,{childList:true,subtree:true});
+});
+</script>
+
+</body>
+</html>
